@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes, viewport-fit=cover">
+  <title>Pali Simulation | Physics Lab</title>
+  <style>
+    :root {
+      --bg: #080c14;
+      --surface: #111827;
+      --border: #1f2a3a;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --green: #4ade80;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --blue: #60a5fa;
+      --radius: 10px;
+      --shadow: 0 4px 20px rgba(0,0,0,0.5);
+      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    /* LAYOUT */
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+    /* HEADER */
+    .header {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-shrink: 0;
+      z-index: 20;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: clamp(0.7rem, 2vw, 0.95rem);
+      letter-spacing: -0.3px;
+      color: #fff;
+      white-space: nowrap;
+    }
+    .brand .icon {
+      font-size: 1.2rem;
+    }
+    .brand .highlight {
+      background: var(--accent);
+      color: #000;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .dev {
+      font-size: 0.6rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+    /* BUTTONS */
+    .btn {
+      padding: 7px 11px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      letter-spacing: 0.2px;
+    }
+    .btn:active {
+      transform: scale(0.95);
+    }
+    .btn.primary {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      font-weight: 700;
+      box-shadow: 0 0 14px rgba(56,189,248,0.35);
+    }
+    .btn.danger {
+      background: var(--red);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+    }
+    .btn.warning {
+      background: var(--yellow);
+      color: #000;
+      border: none;
+      font-weight: 700;
+    }
+    .sound-label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.7rem;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .sound-label input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+    }
+    /* MAIN CONTENT */
+    .main {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      position: relative;
+    }
+    /* 3D VIEW */
+    .view {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+      cursor: grab;
+      background: radial-gradient(ellipse at 50% 30%, #111d2e 0%, #060b13 100%);
+    }
+    .view:active {
+      cursor: grabbing;
+    }
+    .view canvas {
+      display: block;
+    }
+    /* BAR CHART OVERLAY */
+    .bar-overlay {
+      position: absolute;
+      bottom: clamp(6px, 1.5vw, 10px);
+      left: clamp(6px, 1.5vw, 10px);
+      width: clamp(260px, 35vw, 340px);
+      height: clamp(120px, 18vh, 170px);
+      background: rgba(10, 15, 25, 0.9);
+      backdrop-filter: blur(10px);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px 10px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .bar-overlay .title {
+      font-size: clamp(0.5rem, 1.2vw, 0.65rem);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .bar-overlay canvas {
+      flex: 1;
+      width: 100%;
+      display: block;
+    }
+    /* SIDEBAR */
+    .sidebar {
+      width: clamp(300px, 38vw, 400px);
+      background: var(--surface);
+      border-left: 2px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      flex-shrink: 0;
+      gap: 8px;
+      padding: clamp(8px, 1.5vw, 12px);
+      scrollbar-width: thin;
+      scrollbar-color: #2d3748 transparent;
+    }
+    .sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .sidebar::-webkit-scrollbar-thumb {
+      background: #2d3748;
+      border-radius: 3px;
+    }
+    /* CONTROL CARDS */
+    .ctrl-card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: clamp(8px, 1.5vw, 10px);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .ctrl-card label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: clamp(0.65rem, 1.3vw, 0.78rem);
+      font-weight: 600;
+      color: #cbd5e1;
+      gap: 6px;
+    }
+    .ctrl-card label input[type="number"] {
+      width: clamp(55px, 8vw, 72px);
+      background: #1a2332;
+      border: 1.5px solid #2d3748;
+      border-radius: 4px;
+      color: #fff;
+      padding: 4px 5px;
+      text-align: center;
+      font-weight: 700;
+      font-size: clamp(0.65rem, 1.3vw, 0.78rem);
+      font-family: var(--font);
+    }
+    .ctrl-card input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 5px;
+      border-radius: 3px;
+      background: #2d3748;
+      outline: none;
+      margin: 2px 0;
+    }
+    .ctrl-card input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid var(--accent);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    /* LIVE DATA */
+    .live-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+    }
+    .live-card {
+      background: rgba(255,255,255,0.03);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: clamp(6px, 1vw, 8px);
+      text-align: center;
+      transition: border-color 0.3s;
+    }
+    .live-card .val {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-weight: 800;
+      font-family: 'Courier New', monospace;
+      letter-spacing: -0.5px;
+    }
+    .live-card .lbl {
+      font-size: clamp(0.45rem, 1vw, 0.55rem);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+    .live-card.accent {
+      border-color: var(--accent);
+    }
+    .live-card.red {
+      border-color: var(--red);
+    }
+    /* RECORD SECTION */
+    .record-row {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+    .table-wrap {
+      max-height: clamp(100px, 15vh, 140px);
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-top: 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: clamp(0.5rem, 1vw, 0.65rem);
+    }
+    th, td {
+      border: 1px solid #1f2a3a;
+      padding: 3px 4px;
+      text-align: right;
+      color: #cbd5e1;
+    }
+    th {
+      background: #1a2332;
+      color: var(--muted);
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+    }
+    /* OBJECTIVES */
+    .objectives {
+      background: rgba(56,189,248,0.05);
+      border: 1.5px solid rgba(56,189,248,0.2);
+      border-radius: var(--radius);
+      padding: 10px;
+      font-size: clamp(0.6rem, 1.2vw, 0.7rem);
+      color: #b9c7dd;
+      line-height: 1.5;
+    }
+    .objectives summary {
+      font-weight: 700;
+      color: var(--accent);
+      cursor: pointer;
+      font-size: clamp(0.65rem, 1.3vw, 0.75rem);
+    }
+    .objectives ol {
+      padding-left: 18px;
+      margin-top: 4px;
+    }
+    /* RESPONSIVE BREAKPOINTS */
+    @media (max-width: 700px) {
+      .main {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        max-height: 42vh;
+        border-left: none;
+        border-top: 2px solid var(--border);
+        gap: 5px;
+        padding: 8px;
+      }
+      .view {
+        flex: 1;
+        min-height: 35vh;
+      }
+      .bar-overlay {
+        width: calc(100% - 16px);
+        left: 8px;
+        right: 8px;
+        height: 120px;
+        bottom: 6px;
+      }
+      .header {
+        padding: 6px 8px;
+        gap: 4px;
+      }
+      .btn {
+        padding: 5px 8px;
+        font-size: 0.6rem;
+      }
+    }
+    @media (min-width: 1400px) {
+      .sidebar {
+        width: 420px;
+      }
+      .bar-overlay {
+        width: 380px;
+        height: 190px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="brand">
+      <span class="icon">⚛️</span> Pali Simulation
+      <span class="highlight">Physics Lab</span>
+      <span class="dev">by Prince Alinani</span>
+    </div>
+    <div class="header-actions">
+      <label class="sound-label">
+        <input type="checkbox" id="soundToggle" checked> Sound
+      </label>
+      <button class="btn" id="btnResetView">📷 View</button>
+      <button class="btn primary" id="btnPlayPause">▶ Start</button>
+      <button class="btn danger" id="btnReset">↺ Reset</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- 3D VIEW -->
+    <div class="view" id="view3d">
+      <div class="bar-overlay" id="barPanel">
+        <span class="title">📊 Force Bar Chart (N)</span>
+        <canvas id="barCanvas"></canvas>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="ctrl-card">
+        <label>Mass (kg) <input type="number" id="inputMass" step="0.1" value="10.0"></label>
+        <input type="range" id="sliderMass" min="0.5" max="100" step="0.5" value="10">
+      </div>
+      <div class="ctrl-card">
+        <label>Applied Force (N) <input type="number" id="inputForce" step="1" value="100"></label>
+        <input type="range" id="sliderForce" min="0" max="500" step="1" value="100">
+      </div>
+      <div class="ctrl-card">
+        <label>Friction μ <input type="number" id="inputFriction" step="0.01" value="0.30"></label>
+        <input type="range" id="sliderFriction" min="0" max="1" step="0.01" value="0.3">
+      </div>
+      <div class="ctrl-card">
+        <label>Initial Vel (m/s) <input type="number" id="inputVelocity" step="0.5" value="0.0"></label>
+        <input type="range" id="sliderVelocity" min="-20" max="20" step="0.5" value="0">
+      </div>
+
+      <div class="live-grid">
+        <div class="live-card accent"><div class="val" id="dv">0.00</div><div class="lbl">Velocity</div></div>
+        <div class="live-card"><div class="val" id="da">0.00</div><div class="lbl">Accel</div></div>
+        <div class="live-card"><div class="val" id="dfn">0.0</div><div class="lbl">Net Force</div></div>
+        <div class="live-card red"><div class="val" id="dfr">0.0</div><div class="lbl">Friction</div></div>
+        <div class="live-card" style="grid-column:span 2;"><div class="val" id="dp">0.00</div><div class="lbl">Position (m)</div></div>
+        <div class="live-card" style="grid-column:span 2;"><div class="val" id="dt">0.00</div><div class="lbl">Time (s)</div></div>
+      </div>
+
+      <div class="record-row">
+        <button class="btn" id="btnRecord">⏺ Record</button>
+        <button class="btn" id="btnCSV" style="display:none;">📥 CSV</button>
+        <button class="btn" id="btnClear">🗑 Clear</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>T</th><th>X</th><th>V</th><th>A</th><th>Fn</th><th>Fr</th></tr></thead>
+          <tbody id="dataBody"></tbody>
+        </table>
+      </div>
+
+      <details class="objectives" open>
+        <summary>🎯 Learning Objectives</summary>
+        <ol>
+          <li>See F=ma: mass affects acceleration.</li>
+          <li>Friction opposes motion.</li>
+          <li>Inertia: motion without net force.</li>
+          <li>Record & export spreadsheet data.</li>
+        </ol>
+      </details>
+    </div>
+  </div>
+
+  <script type="importmap">
+    { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    // ──────────── DOM refs ────────────
+    const container = document.getElementById('view3d');
+    const barCanvas = document.getElementById('barCanvas');
+    const ctxBar = barCanvas.getContext('2d');
+    const soundToggle = document.getElementById('soundToggle');
+    const btnPlay = document.getElementById('btnPlayPause');
+    const btnReset = document.getElementById('btnReset');
+    const btnRecord = document.getElementById('btnRecord');
+    const btnCSV = document.getElementById('btnCSV');
+    const btnClear = document.getElementById('btnClear');
+    const dataBody = document.getElementById('dataBody');
+
+    const inpMass = document.getElementById('inputMass');
+    const inpForce = document.getElementById('inputForce');
+    const inpFric = document.getElementById('inputFriction');
+    const inpVel = document.getElementById('inputVelocity');
+    const sldMass = document.getElementById('sliderMass');
+    const sldForce = document.getElementById('sliderForce');
+    const sldFric = document.getElementById('sliderFriction');
+    const sldVel = document.getElementById('sliderVelocity');
+
+    const dv = document.getElementById('dv');
+    const da = document.getElementById('da');
+    const dfn = document.getElementById('dfn');
+    const dfr = document.getElementById('dfr');
+    const dp = document.getElementById('dp');
+    const dtEl = document.getElementById('dt');
+
+    // ──────────── State ────────────
+    const G = 9.8, XMIN = -7, XMAX = 7;
+    let mass = 10, force = 100, mu = 0.3, initV = 0;
+    let pos = -5.5, vel = 0, acc = 0, fric = 0, fnet = 0, time = 0;
+    let playing = false, recording = false, sound = true;
+    let log = [], lastRec = 0;
+
+    // ──────────── Audio ────────────
+    let actx = null, motOsc = null, motGain = null;
+    function initAudio() {
+      if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+      if (actx.state === 'suspended') actx.resume();
+    }
+    function beep(f = 600, d = 0.1) {
+      if (!sound || !actx) return;
+      const o = actx.createOscillator();
+      const g = actx.createGain();
+      o.frequency.value = f;
+      g.gain.setValueAtTime(0.3, actx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + d);
+      o.connect(g).connect(actx.destination);
+      o.start();
+      o.stop(actx.currentTime + d);
+    }
+    function startMotor() {
+      if (!sound || !actx || motOsc) return;
+      motOsc = actx.createOscillator();
+      motGain = actx.createGain();
+      motOsc.type = 'sawtooth';
+      motOsc.frequency.value = 40;
+      motGain.gain.value = 0.04;
+      motOsc.connect(motGain).connect(actx.destination);
+      motOsc.start();
+    }
+    function stopMotor() {
+      if (motOsc) { motOsc.stop();
+        motOsc.disconnect();
+        motGain.disconnect();
+        motOsc = null;
+        motGain = null; }
+    }
+    function updateMotor(s) {
+      if (motOsc) { motOsc.frequency.value = 40 + Math.abs(s) * 6;
+        motGain.gain.value = Math.min(0.07, Math.abs(s) * 0.008 + 0.02); }
+    }
+
+    // ──────────── 3D Scene ────────────
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color('#080c16');
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
+    container.appendChild(renderer.domElement);
+
+    const camera = new THREE.PerspectiveCamera(52, 2, 0.5, 80);
+    camera.position.set(3, 5, 11);
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.target.set(-3, 0.6, 0);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.14;
+    controls.minDistance = 3.5;
+    controls.maxDistance = 22;
+    controls.maxPolarAngle = Math.PI * 0.55;
+    controls.update();
+
+    scene.add(new THREE.AmbientLight('#b0c4de', 2.2));
+    const sun = new THREE.DirectionalLight('#fffdf5', 5);
+    sun.position.set(14, 22, 9);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(1024, 1024);
+    sun.shadow.camera.near = 0.5;
+    sun.shadow.camera.far = 50;
+    sun.shadow.camera.left = -18;
+    sun.shadow.camera.right = 18;
+    sun.shadow.camera.top = 18;
+    sun.shadow.camera.bottom = -4;
+    sun.shadow.bias = -0.0003;
+    scene.add(sun);
+    scene.add(new THREE.DirectionalLight('#c0d8ff', 1).position.set(-5, 3, -2));
+
+    // Ground
+    const gnd = new THREE.Mesh(
+      new THREE.PlaneGeometry(40, 40),
+      new THREE.MeshStandardMaterial({ color: '#1a2535', roughness: 0.75, metalness: 0.1 })
+    );
+    gnd.rotation.x = -Math.PI / 2;
+    gnd.receiveShadow = true;
+    scene.add(gnd);
+
+    // Grid
+    const grid = new THREE.GridHelper(30, 30, '#3a4a5c', '#1a2535');
+    grid.position.y = 0.005;
+    scene.add(grid);
+
+    // Stadium barriers
+    const wallMat = new THREE.MeshStandardMaterial({ color: '#f97316', roughness: 0.35, metalness: 0.25, emissive: '#331100', emissiveIntensity: 0.3 });
+    const lWall = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.1, 2.6), wallMat);
+    lWall.position.set(XMIN - 0.25, 0.55, 0);
+    lWall.castShadow = lWall.receiveShadow = true;
+    scene.add(lWall);
+    const rWall = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.1, 2.6), wallMat);
+    rWall.position.set(XMAX + 0.25, 0.55, 0);
+    rWall.castShadow = rWall.receiveShadow = true;
+    scene.add(rWall);
+    // Side rails
+    const railMat = new THREE.MeshStandardMaterial({ color: '#64748b', roughness: 0.5, metalness: 0.4 });
+    [-1.5, 1.5].forEach(z => {
+      const rail = new THREE.Mesh(new THREE.BoxGeometry(16, 0.2, 0.2), railMat);
+      rail.position.set(0, 0.1, z);
+      rail.receiveShadow = true;
+      scene.add(rail);
+    });
+
+    // Distance markers
+    function makeSprite(n) {
+      const c = document.createElement('canvas');
+      c.width = 64;
+      c.height = 48;
+      const cx = c.getContext('2d');
+      cx.fillStyle = '#fff';
+      cx.font = 'bold 22px "Segoe UI",sans-serif';
+      cx.textAlign = 'center';
+      cx.fillText(n + 'm', 32, 32);
+      const t = new THREE.CanvasTexture(c);
+      t.minFilter = THREE.LinearFilter;
+      const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthTest: false }));
+      s.scale.set(0.6, 0.45, 1);
+      return s;
+    }
+    for (let x = -6; x <= 6; x += 2) {
+      const sp = makeSprite(x);
+      sp.position.set(x, 0.12, -1.1);
+      scene.add(sp);
+    }
+
+    // Cart
+    const cart = new THREE.Group();
+    const body = new THREE.Mesh(
+      new THREE.BoxGeometry(1.1, 0.55, 0.75),
+      new THREE.MeshStandardMaterial({ color: '#f97316', roughness: 0.22, metalness: 0.45 })
+    );
+    body.position.y = 0.48;
+    body.castShadow = body.receiveShadow = true;
+    cart.add(body);
+    const wGeom = new THREE.CylinderGeometry(0.18, 0.18, 0.13, 16);
+    const wMat = new THREE.MeshStandardMaterial({ color: '#0f172a', roughness: 0.25, metalness: 0.7 });
+    [
+      [-0.45, 0.4],
+      [0.45, 0.4],
+      [-0.45, -0.4],
+      [0.45, -0.4]
+    ].forEach(([x, z]) => {
+      const w = new THREE.Mesh(wGeom, wMat);
+      w.rotation.z = Math.PI / 2;
+      w.position.set(x, 0.22, z);
+      w.castShadow = w.receiveShadow = true;
+      cart.add(w);
+    });
+    cart.position.set(pos, 0, 0);
+    scene.add(cart);
+
+    // Arrows
+    function makeArrow(col) {
+      const g = new THREE.Group();
+      const s = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 1, 6),
+        new THREE.MeshStandardMaterial({ color: col, emissive: col, emissiveIntensity: 0.5, roughness: 0.2 }));
+      s.position.y = 0.5;
+      g.add(s);
+      const h = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.38, 6),
+        new THREE.MeshStandardMaterial({ color: col, emissive: col, emissiveIntensity: 0.5, roughness: 0.2 }));
+      h.position.y = 1.1;
+      g.add(h);
+      return g;
+    }
+    const arrApp = makeArrow('#4ade80');
+    scene.add(arrApp);
+    const arrFric = makeArrow('#f87171');
+    scene.add(arrFric);
+    const arrVel = makeArrow('#60a5fa');
+    scene.add(arrVel);
+
+    function updateArrow(ar, mag, dX, bx, by, bz, ox = 0, oy = 0, oz = 0, sc = 0.022) {
+      const len = Math.max(Math.abs(mag) * sc, 0.1);
+      ar.scale.set(1, len, 1);
+      ar.position.set(bx + ox, by + oy, bz + oz);
+      ar.rotation.set(0, 0, dX > 0 ? -Math.PI / 2 : Math.PI / 2);
+      ar.visible = Math.abs(mag) > 0.008;
+    }
+
+    // ──────────── Physics ────────────
+    function step(dt) {
+      if (!playing) return;
+      const N = mass * G;
+      const fMax = mu * N;
+      const thr = 0.008;
+      if (Math.abs(vel) < thr) {
+        if (Math.abs(force) <= fMax) { fric = force;
+          fnet = 0;
+          vel = 0;
+          acc = 0; } else { fric = fMax;
+          fnet = force - fMax;
+          acc = fnet / mass;
+          vel += acc * dt; }
+      } else {
+        fric = fMax;
+        fnet = force - Math.sign(vel) * fric;
+        acc = fnet / mass;
+        vel += acc * dt;
+        if (Math.abs(vel) < thr && Math.abs(force) <= fMax) { vel = 0;
+          acc = 0;
+          fnet = 0;
+          fric = force; }
+      }
+      pos += vel * dt;
+      if (pos > XMAX) { pos = XMAX;
+        vel = 0;
+        beep(80, 0.12); }
+      if (pos < XMIN) { pos = XMIN;
+        vel = 0;
+        beep(80, 0.12); }
+      time += dt;
+    }
+
+    // ──────────── Sync ────────────
+    function syncSliders() {
+      mass = +sldMass.value;
+      force = +sldForce.value;
+      mu = +sldFric.value;
+      initV = +sldVel.value;
+      inpMass.value = mass.toFixed(1);
+      inpForce.value = Math.round(force);
+      inpFric.value = mu.toFixed(2);
+      inpVel.value = initV.toFixed(1);
+    }
+    sldMass.addEventListener('input', syncSliders);
+    sldForce.addEventListener('input', syncSliders);
+    sldFric.addEventListener('input', syncSliders);
+    sldVel.addEventListener('input', syncSliders);
+    inpMass.addEventListener('change', () => { mass = +inpMass.value || 10;
+      sldMass.value = mass; });
+    inpForce.addEventListener('change', () => { force = +inpForce.value || 0;
+      sldForce.value = force; });
+    inpFric.addEventListener('change', () => { mu = +inpFric.value || 0;
+      sldFric.value = mu; });
+    inpVel.addEventListener('change', () => { initV = +inpVel.value || 0;
+      sldVel.value = initV; });
+
+    function resetSim() {
+      pos = -5.5;
+      vel = initV;
+      acc = 0;
+      fric = 0;
+      fnet = 0;
+      time = 0;
+      cart.position.x = pos;
+    }
+    btnReset.addEventListener('click', () => {
+      resetSim();
+      if (playing) { playing = false;
+        btnPlay.textContent = '▶ Start';
+        btnPlay.classList.add('primary');
+        btnPlay.classList.remove('warning'); }
+      stopMotor();
+    });
+    btnPlay.addEventListener('click', () => {
+      initAudio();
+      playing = !playing;
+      btnPlay.textContent = playing ? '⏯ Pause' : '▶ Start';
+      btnPlay.classList.toggle('primary', !playing);
+      btnPlay.classList.toggle('warning', playing);
+      if (playing) beep(500, 0.07);
+      else stopMotor();
+    });
+    document.getElementById('btnResetView').addEventListener('click', () => {
+      camera.position.set(3, 5, 11);
+      controls.target.set(pos, 0.6, 0);
+      controls.update();
+    });
+
+    // ──────────── Recording ────────────
+    btnRecord.addEventListener('click', () => {
+      recording = !recording;
+      btnRecord.textContent = recording ? '⏹ Stop' : '⏺ Record';
+      btnRecord.classList.toggle('danger', recording);
+      btnCSV.style.display = (!recording && log.length) ? 'inline-flex' : 'none';
+    });
+    btnClear.addEventListener('click', () => { log = [];
+      dataBody.innerHTML = '';
+      btnCSV.style.display = 'none'; });
+    btnCSV.addEventListener('click', () => {
+      let csv = 'Time,Position,Velocity,Accel,NetForce,Friction\n';
+      log.forEach(r => csv += `${r.t},${r.x},${r.v},${r.a},${r.fn},${r.fr}\n`);
+      const b = new Blob([csv], { type: 'text/csv' });
+      const u = URL.createObjectURL(b);
+      const a = document.createElement('a');
+      a.href = u;
+      a.download = 'pali_physics.csv';
+      a.click();
+      URL.revokeObjectURL(u);
+    });
+
+    // ──────────── Bar chart ────────────
+    function drawBar() {
+      const panel = document.getElementById('barPanel');
+      const r = panel.getBoundingClientRect();
+      const w = r.width - 18,
+        h = r.height - 34;
+      if (w <= 0 || h <= 0) return;
+      barCanvas.width = w * devicePixelRatio;
+      barCanvas.height = h * devicePixelRatio;
+      barCanvas.style.width = w + 'px';
+      barCanvas.style.height = h + 'px';
+      ctxBar.setTransform(1, 0, 0, 1, 0, 0);
+      ctxBar.scale(devicePixelRatio, devicePixelRatio);
+      ctxBar.clearRect(0, 0, w, h);
+      const maxF = Math.max(force, Math.abs(fric), Math.abs(fnet), 10);
+      const scY = (h - 38) / (maxF * 1.2);
+      const drawB = (l, v, c, x) => {
+        const ht = Math.abs(v) * scY;
+        const y = v >= 0 ? h - 28 - ht : h - 28;
+        ctxBar.fillStyle = c;
+        ctxBar.beginPath();
+        ctxBar.roundRect(x, y, 42, ht, 4);
+        ctxBar.fill();
+        ctxBar.fillStyle = '#fff';
+        ctxBar.font = 'bold 9px "Segoe UI",sans-serif';
+        ctxBar.textAlign = 'center';
+        ctxBar.fillText(l, x + 21, h - 12);
+        ctxBar.fillText(v.toFixed(1) + 'N', x + 21, v >= 0 ? y - 5 : y + ht + 13);
+      };
+      drawB('Applied', force, '#4ade80', 38);
+      drawB('Friction', Math.abs(fric), '#f87171', 118);
+      drawB('Net', fnet, '#60a5fa', 198);
+    }
+
+    // ──────────── Loop ────────────
+    const clock = new THREE.Clock();
+    let barTick = 0;
+    function animate() {
+      requestAnimationFrame(animate);
+      const dt = Math.min(clock.getDelta(), 0.1);
+      step(dt);
+      cart.position.x = pos;
+
+      updateArrow(arrApp, force, 1, pos, 0.6, 0, 0.8, 0, 0);
+      updateArrow(arrFric, Math.abs(fric), vel > 0.008 ? -1 : 1, pos, 0.32, 0, -0.8, 0, 0);
+      updateArrow(arrVel, Math.abs(vel), vel > 0 ? 1 : -1, pos, 1.15, 0, 0, 0, 0, 0.16);
+
+      if (sound && playing) {
+        if (Math.abs(vel) > 0.1) { if (!motOsc) startMotor();
+          updateMotor(vel); } else stopMotor();
+      } else stopMotor();
+
+      dv.textContent = vel.toFixed(2);
+      da.textContent = acc.toFixed(2);
+      dfn.textContent = fnet.toFixed(1);
+      dfr.textContent = Math.abs(fric).toFixed(1);
+      dp.textContent = pos.toFixed(2);
+      dtEl.textContent = time.toFixed(2);
+
+      if (recording && playing && time - lastRec >= 0.15) {
+        log.push({ t: time.toFixed(2), x: pos.toFixed(2), v: vel.toFixed(2), a: acc.toFixed(2), fn: fnet.toFixed(1), fr: Math.abs(fric).toFixed(1) });
+        if (log.length > 150) log.shift();
+        const row = document.createElement('tr');
+        row.innerHTML =
+          `<td>${log[log.length-1].t}</td><td>${log[log.length-1].x}</td><td>${log[log.length-1].v}</td><td>${log[log.length-1].a}</td><td>${log[log.length-1].fn}</td><td>${log[log.length-1].fr}</td>`;
+        dataBody.appendChild(row);
+        if (dataBody.children.length > 70) dataBody.removeChild(dataBody.firstChild);
+        lastRec = time;
+      }
+
+      barTick++;
+      if (barTick >= 4) { barTick = 0;
+        drawBar(); }
+      controls.target.x += (pos - controls.target.x) * 0.12;
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    // ──────────── Resize ────────────
+    function resize() {
+      const rect = container.getBoundingClientRect();
+      renderer.setSize(rect.width, rect.height);
+      camera.aspect = rect.width / Math.max(rect.height, 1);
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener('resize', resize);
+    window.addEventListener('orientationchange', () => setTimeout(resize, 200));
+    soundToggle.addEventListener('change', e => { sound = e.target.checked; if (!sound) stopMotor(); });
+
+    // ──────────── Init ────────────
+    resize();
+    syncSliders();
+    resetSim();
+    animate();
+
+    console.log('⚛️ Pali Simulation Physics Lab — by Prince Alinani');
+    console.log('   Mobile + Desktop Ready | Full Command | Sound | Recording | CSV Export');
+  </script>
+</body>
+</html> 
