@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes, viewport-fit=cover">
+  <title>Pali Simulation — Quiz | Physics Lab</title>
+  <style>
+    :root{--bg:#080c14;--surface:#0f1724;--accent:#38bdf8;--text:#e6eef8;--muted:#94a3b8;--green:#4ade80;--yellow:#f59e0b;--radius:12px}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;background:linear-gradient(180deg,#071223 0%, #07121a 100%);color:var(--text);-webkit-font-smoothing:antialiased}
+    .wrap{max-width:920px;margin:28px auto;padding:20px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand .logo{font-size:1.6rem}
+    h1{font-size:1.1rem;margin:0}
+    .meta{font-size:0.82rem;color:var(--muted)}
+    .content{display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:18px}
+    @media(max-width:900px){.content{grid-template-columns:1fr}}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+    form{display:flex;flex-direction:column;gap:14px}
+    .q{padding:10px;border-radius:8px}
+    .q h3{margin:0 0 8px 0;font-size:0.95rem}
+    label{display:block;padding:8px;border-radius:6px;margin-bottom:6px;background:rgba(255,255,255,0.01);cursor:pointer}
+    input[type=radio]{margin-right:8px}
+    .actions{display:flex;gap:8px;align-items:center}
+    .btn{padding:9px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:var(--accent);color:#000;font-weight:700;cursor:pointer}
+    .btn.ghost{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,0.06)}
+    .result{padding:14px;text-align:center}
+    .pass{color:var(--green);font-weight:800;font-size:1.1rem}
+    .fail{color:var(--yellow);font-weight:700}
+    .confetti-piece{position:fixed;pointer-events:none;width:10px;height:14px;opacity:0.95;border-radius:2px}
+    .trophy{font-size:48px}
+    footer{margin-top:18px;font-size:0.8rem;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+    .small{font-size:0.82rem;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">⚛️</div>
+        <div>
+          <h1>Pali Simulation — Quick Quiz</h1>
+          <div class="meta">5 questions — Pass all to continue. Developer: Prince Alinani · 2026 · International</div>
+        </div>
+      </div>
+      <div class="small">This opens as a separate learning page — mobile & desktop friendly</div>
+    </header>
+
+    <div class="content">
+      <main class="card">
+        <form id="quizForm" aria-labelledby="quizTitle">
+
+          <div class="q" data-index="0">
+            <h3>1) Which equation describes the relation between net force, mass and acceleration?</h3>
+            <label><input type="radio" name="q0" value="a"> F = m / a</label>
+            <label><input type="radio" name="q0" value="b"> F = m * a</label>
+            <label><input type="radio" name="q0" value="c"> F = a - m</label>
+          </div>
+
+          <div class="q" data-index="1">
+            <h3>2) If frictional force increases, what happens to acceleration (other things equal)?</h3>
+            <label><input type="radio" name="q1" value="a"> Acceleration increases</label>
+            <label><input type="radio" name="q1" value="b"> Acceleration decreases</label>
+            <label><input type="radio" name="q1" value="c"> Acceleration stays same</label>
+          </div>
+
+          <div class="q" data-index="2">
+            <h3>3) In the simulation, what parameter controls maximum static friction (approx)?</h3>
+            <label><input type="radio" name="q2" value="a"> Mass</label>
+            <label><input type="radio" name="q2" value="b"> Friction coefficient μ</label>
+            <label><input type="radio" name="q2" value="c"> Initial velocity</label>
+          </div>
+
+          <div class="q" data-index="3">
+            <h3>4) If applied force equals maximum static friction and velocity is zero, the cart will:</h3>
+            <label><input type="radio" name="q3" value="a"> Start moving quickly</label>
+            <label><input type="radio" name="q3" value="b"> Stay at rest (no net force)</label>
+            <label><input type="radio" name="q3" value="c"> Teleport to end</label>
+          </div>
+
+          <div class="q" data-index="4">
+            <h3>5) Which control would you adjust to increase acceleration most directly?</h3>
+            <label><input type="radio" name="q4" value="a"> Increase mass</label>
+            <label><input type="radio" name="q4" value="b"> Increase applied force</label>
+            <label><input type="radio" name="q4" value="c"> Increase friction</label>
+          </div>
+
+          <div class="actions">
+            <button type="button" class="btn" id="btnSubmit">Check Answers</button>
+            <button type="button" class="btn ghost" id="btnReset">Reset Answers</button>
+            <a class="btn ghost" id="backSim" href="index.html" target="_self" rel="noopener">Return to Simulation</a>
+          </div>
+
+        </form>
+
+        <div id="result" class="result" aria-live="polite" style="display:none"></div>
+      </main>
+
+      <aside class="card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <div style="font-size:28px">🧭</div>
+          <div>
+            <div style="font-weight:800">How this quiz works</div>
+            <div class="meta">Answer all 5 questions. A perfect score unlocks a congratulatory celebration and a motivational prize. Otherwise you'll be gently guided to practice and return.</div>
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <strong>Scoring</strong>
+          <ol style="padding-left:18px;margin-top:6px;color:var(--muted)">
+            <li>All 5 correct: Pass</li>
+            <li>Any incorrect: Review simulation and try again</li>
+          </ol>
+        </div>
+
+        <div style="margin-top:12px">
+          <strong>Developer</strong>
+          <div class="meta">Prince Alinani · 2026</div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <div class="small">International Simulation — Built for learners and instructors</div>
+      <div class="small">Optimized for mobile & desktop</div>
+    </footer>
+  </div>
+
+  <script>
+    // Correct answers map
+    const answers = ['b','b','b','b','b'];
+    const form = document.getElementById('quizForm');
+    const btnSubmit = document.getElementById('btnSubmit');
+    const btnReset = document.getElementById('btnReset');
+    const resultEl = document.getElementById('result');
+    const backSim = document.getElementById('backSim');
+
+    function confettiBurst(){
+      const colors = ['#ff4757','#ff6b81','#ffd64d','#2ed573','#70a1ff','#7bed9f'];
+      for(let i=0;i<60;i++){
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        el.style.background = colors[Math.floor(Math.random()*colors.length)];
+        el.style.left = (Math.random()*100)+'%';
+        el.style.top = '-10%';
+        el.style.transform = 'rotate('+ (Math.random()*360) +'deg)';
+        el.style.opacity = 0.95;
+        el.style.width = (6 + Math.random()*8)+'px';
+        el.style.height = (10 + Math.random()*10)+'px';
+        document.body.appendChild(el);
+        // animate
+        const duration = 2000 + Math.random()*1400;
+        el.animate([
+          {transform: 'translateY(0) rotate(0)', opacity:1},
+          {transform: 'translateY('+ (window.innerHeight + 200) +'px) rotate(720deg)', opacity:0.9}
+        ],{duration, easing:'cubic-bezier(.2,.8,.2,1)'});
+        setTimeout(()=> el.remove(), duration+50);
+      }
+    }
+
+    function showPass(){
+      resultEl.style.display = 'block';
+      resultEl.innerHTML = `\n        <div class="pass">🎉 Congratulations — Perfect score!</div>\n        <div style="margin-top:10px">You passed all questions. You're ready to continue to other tasks. As a token of achievement:</div>\n        <div style="margin-top:12px;font-size:48px">🏆</div>\n        <div style="margin-top:8px;color:var(--muted)">A special Noble-style prize to celebrate your learning — Keep practicing and sharing!</div>\n        <div style="margin-top:12px"><button id=claim class="btn">Claim my Certificate</button> <button id=again class="btn ghost">Close</button></div>`;
+      // confetti
+      confettiBurst();
+      document.getElementById('claim').addEventListener('click', ()=>{
+        const w = window.open('', '_blank');
+        w.document.write('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Certificate</title><style>body{font-family:Segoe UI,system-ui;margin:40px;background:#07101b;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh} .cert{background:linear-gradient(180deg,#083047,#021018);padding:30px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);text-align:center} h1{margin:0 0 8px 0} p{color:#9fb3c9}</style></head><body><div class="cert"><h1>Certificate of Achievement</h1><p>Presented to the learner for completing the Pali Simulation Quiz (5/5)</p><p style="margin-top:18px;font-weight:800">Prince Alinani · 2026</p></div></body></html>');
+      });
+      document.getElementById('again').addEventListener('click', ()=>{ resultEl.style.display='none'; });
+    }
+
+    function showFail(missed){
+      resultEl.style.display = 'block';
+      resultEl.innerHTML = `<div class="fail">Almost there — ${missed} incorrect</div><div style="margin-top:8px;color:var(--muted)">Please return to the simulation to practice more, then come back and try the quiz again for perfection.</div><div style="margin-top:12px"><a class="btn" href="index.html" target="_self">Return to Simulation</a> <button id=retry class="btn ghost">Try Again</button></div>`;
+      document.getElementById('retry').addEventListener('click', ()=>{ resultEl.style.display='none'; });
+    }
+
+    btnSubmit.addEventListener('click', ()=>{
+      const formData = new FormData(form);
+      let score = 0; let missed = 0;
+      for(let i=0;i<answers.length;i++){
+        const a = formData.get('q'+i);
+        if(a === answers[i]) score++; else missed++;
+      }
+      if(score === answers.length){ showPass(); } else { showFail(missed); }
+    });
+
+    btnReset.addEventListener('click', ()=>{ form.reset(); resultEl.style.display='none'; });
+
+    // Accessibility: focus first question
+    document.querySelector('.q input')?.focus();
+  </script>
+</body>
+</html>
