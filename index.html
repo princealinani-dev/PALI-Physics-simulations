@@ -402,6 +402,7 @@
       </label>
       <button class="btn" id="btnResetView">📷 View</button>
       <button class="btn primary" id="btnPlayPause">▶ Start</button>
+      <a class="btn primary" href="quiz.html" target="_blank" rel="noopener">🧩 Quiz</a>
       <button class="btn danger" id="btnReset">↺ Reset</button>
     </div>
   </div>
@@ -872,7 +873,7 @@
         if (log.length > 150) log.shift();
         const row = document.createElement('tr');
         row.innerHTML =
-          `<td>${log[log.length-1].t}</td><td>${log[log.length-1].x}</td><td>${log[log.length-1].v}</td><td>${log[log.length-1].a}</td><td>${log[log.length-1].fn}</td><td>${log[log.length-1].fr}</td>`;
+          `<td>${log[log.length-1].t}</td><td>${log[log.length-1].x}</td><td>${log[log.length-1].v}</td><td>${log[log.length-1].a}</td><td>${log[log.length-1].fn}</td><td>${log[log.length-1].fr}`;
         dataBody.appendChild(row);
         if (dataBody.children.length > 70) dataBody.removeChild(dataBody.firstChild);
         lastRec = time;
@@ -907,4 +908,4 @@
     console.log('   Mobile + Desktop Ready | Full Command | Sound | Recording | CSV Export');
   </script>
 </body>
-</html> 
+</html>
