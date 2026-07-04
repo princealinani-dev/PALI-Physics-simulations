@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newton's First Law of Motion - PALI Physics</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0a0e27;
+      --surface: #111d2e;
+      --surface-light: #1a2a3e;
+      --border: #2a3f5f;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --success: #4ade80;
+      --warning: #f59e0b;
+      --radius: 12px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, var(--bg) 0%, #0f1a35 100%);
+      color: var(--text);
+      line-height: 1.8;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: rgba(17, 29, 46, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .brand .icon {
+      font-size: 2rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 0.7rem 1.5rem;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Progress Tracker */
+    .progress-tracker {
+      background: var(--surface-light);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .progress-tracker-title {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      min-width: 200px;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--success));
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 10px;
+    }
+
+    .progress-percentage {
+      font-weight: 700;
+      color: var(--success);
+      min-width: 60px;
+      text-align: right;
+    }
+
+    /* Section */
+    .section {
+      background: var(--surface-light);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .section-title .icon {
+      font-size: 2rem;
+    }
+
+    .section-content {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .subsection {
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+    }
+
+    .subsection-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--success);
+      margin-bottom: 0.8rem;
+    }
+
+    .formula-box {
+      background: rgba(56, 189, 248, 0.1);
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      font-family: 'Courier New', monospace;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--success);
+    }
+
+    .formula-description {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* Diagram Container */
+    .diagram-container {
+      background: rgba(255, 255, 255, 0.02);
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 300px;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    canvas {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    /* Example Box */
+    .example-box {
+      background: rgba(74, 222, 128, 0.1);
+      border-left: 4px solid var(--success);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .example-title {
+      font-weight: 700;
+      color: var(--success);
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Key Points */
+    .key-points {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 4px solid var(--warning);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .key-points-title {
+      font-weight: 700;
+      color: var(--warning);
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .key-points ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .key-points li {
+      padding: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .key-points li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    /* Learning Resources */
+    .resources {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .resource-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .resource-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(56, 189, 248, 0.2);
+    }
+
+    .resource-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .resource-title {
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      margin-top: 3rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-hover);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .header {
+        padding: 1rem;
+        flex-direction: column;
+      }
+
+      .brand {
+        font-size: 1.2rem;
+      }
+
+      .section {
+        padding: 1.5rem;
+      }
+
+      .section-title {
+        font-size: 1.4rem;
+      }
+
+      .progress-tracker {
+        flex-direction: column;
+      }
+
+      .progress-tracker-title {
+        width: 100%;
+      }
+
+      .diagram-container {
+        min-height: 250px;
+        padding: 1rem;
+      }
+    }
+
+    /* Reading Time Estimate */
+    .reading-time {
+      display: flex;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: rgba(56, 189, 248, 0.1);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .reading-time-item {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* Interactive Checkbox Tracking */
+    .checklist {
+      display: grid;
+      gap: 0.8rem;
+      margin: 1.5rem 0;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .checklist-item input {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+
+    .checklist-item:has(input:checked) {
+      background: rgba(74, 222, 128, 0.1);
+      border-color: var(--success);
+    }
+
+    .checklist-item label {
+      cursor: pointer;
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">
+      <span class="icon">⚛️</span> PALI Physics
+      <span style="color: var(--accent); margin-left: 0.5rem;">First Law</span>
+    </div>
+    <div class="header-actions">
+      <a href="index.html" class="btn">← Back to Simulation</a>
+      <a href="newtons-laws-video.html" class="btn btn-primary">▶️ Watch Videos</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Reading Time & Progress -->
+    <div class="reading-time">
+      <div class="reading-time-item">📚 Reading Time: <strong>~8 minutes</strong></div>
+      <div class="reading-time-item">📊 Difficulty: <strong>Beginner</strong></div>
+    </div>
+
+    <!-- Progress Tracker -->
+    <div class="progress-tracker">
+      <div class="progress-tracker-title">Your Learning Progress</div>
+      <div style="flex: 1; display: flex; gap: 1rem; align-items: center;">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-percentage" id="progressPercent">0%</div>
+      </div>
+    </div>
+
+    <!-- Definition Section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">📖</span> Definition & Concept
+      </div>
+      <div class="section-content">
+        <div class="subsection">
+          <div class="subsection-title">What is Newton's First Law?</div>
+          <p>
+            <strong>Newton's First Law of Motion</strong>, also known as the Law of Inertia, states:
+          </p>
+          <div class="formula-box">
+            An object at rest will remain at rest, and an object in motion<br>
+            will remain in motion at constant velocity,<br>
+            unless acted upon by an external force.
+          </div>
+          <p style="margin-top: 1.5rem;">
+            This fundamental principle describes the behavior of objects when no net force acts upon them. 
+            It introduces the concept of <strong>inertia</strong>, which is the resistance of an object to changes 
+            in its motion. Objects naturally "want" to stay in their current state—whether moving or stationary.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Understanding Inertia -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🔄</span> Understanding Inertia
+      </div>
+      <div class="section-content">
+        <div class="subsection">
+          <div class="subsection-title">What is Inertia?</div>
+          <p>
+            Inertia is the property of matter that resists changes in its state of motion. 
+            The greater the mass of an object, the greater its inertia.
+          </p>
+          
+          <div class="formula-box">
+            Inertia ∝ Mass<br>
+            <span class="formula-description">Inertia is directly proportional to an object's mass</span>
+          </div>
+
+          <div class="key-points">
+            <div class="key-points-title">Key Concepts About Inertia:</div>
+            <ul>
+              <li><strong>Greater mass = Greater inertia</strong> (harder to move or stop)</li>
+              <li><strong>Objects naturally resist change</strong> in their motion</li>
+              <li><strong>No force needed</strong> to maintain constant motion</li>
+              <li><strong>Force is needed to change motion</strong> (accelerate, decelerate, or change direction)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Diagram Section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">📐</span> Visual Representation
+      </div>
+      <div class="diagram-container">
+        <canvas id="diagramCanvas1" width="600" height="350"></canvas>
+      </div>
+      <p style="text-align: center; color: var(--text-muted); margin-top: 1rem;">
+        <em>Diagram showing: Objects at rest stay at rest, objects in motion stay in motion (without external forces)</em>
+      </p>
+    </div>
+
+    <!-- Real-World Examples -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🌍</span> Real-World Examples
+      </div>
+      <div class="section-content">
+        <div class="example-box">
+          <div class="example-title">Example 1: Seatbelts in Cars</div>
+          <p>
+            When a car suddenly brakes, your body tends to continue moving forward due to inertia. 
+            The seatbelt applies a force to stop your forward motion and keep you safely in your seat.
+          </p>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">Example 2: Hockey Puck on Ice</div>
+          <p>
+            A hockey puck sliding on ice will continue moving in a straight line at constant velocity 
+            because the friction force is minimal. Without friction, it would continue indefinitely.
+          </p>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">Example 3: Book on a Table</div>
+          <p>
+            A book resting on a table remains at rest because the gravitational force pulling it down 
+            is balanced by the normal force from the table. With no net force, it stays at rest.
+          </p>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">Example 4: Spinning Skateboard</div>
+          <p>
+            If you spin a skateboard and then let it go on a smooth floor, it continues rotating 
+            because there's no net torque acting on it—rotational inertia keeps it spinning.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mathematical Representation -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">∑</span> Mathematical Expression
+      </div>
+      <div class="section-content">
+        <div class="subsection">
+          <div class="formula-box">
+            If ΣF = 0, then a = 0
+          </div>
+          <div class="formula-description">
+            If the sum of all forces (ΣF) equals zero, then acceleration (a) equals zero.
+            The object moves at constant velocity or remains at rest.
+          </div>
+
+          <p style="margin-top: 1.5rem;">
+            <strong>What this means:</strong>
+          </p>
+          <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+            <li><strong>ΣF</strong> = sum of all forces acting on the object (N)</li>
+            <li><strong>a</strong> = acceleration (m/s²)</li>
+            <li><strong>0</strong> = no net force and no acceleration</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conditions for Newton's First Law -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">⚙️</span> Conditions & Applications
+      </div>
+      <div class="section-content">
+        <div class="subsection">
+          <div class="subsection-title">When does Newton's First Law Apply?</div>
+          <div class="key-points">
+            <div class="key-points-title">Conditions:</div>
+            <ul>
+              <li><strong>Inertial Reference Frames:</strong> The law applies only in non-accelerating reference frames</li>
+              <li><strong>No Net Force:</strong> The sum of all forces must equal zero</li>
+              <li><strong>Equilibrium:</strong> Object is in equilibrium (static or dynamic)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Applications:</div>
+          <ul style="margin-left: 1.5rem;">
+            <li>🚗 Vehicle safety systems (airbags, crumple zones)</li>
+            <li>🛰️ Spacecraft motion in space (no friction, maintains velocity)</li>
+            <li>🏀 Sports (understanding player and ball motion)</li>
+            <li>⚙️ Engineering (bridge and building stability)</li>
+            <li>🎯 Projectile motion analysis</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Learning Checklist -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">✅</span> Learning Checklist
+      </div>
+      <div class="checklist">
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I understand what inertia is
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I can explain Newton's First Law
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I know what happens when net force = 0
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I can identify real-world examples
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I understand the mathematical expression
+        </label>
+      </div>
+    </div>
+
+    <!-- Key Takeaways -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🎓</span> Key Takeaways
+      </div>
+      <div class="section-content">
+        <div class="key-points">
+          <div class="key-points-title">Remember These Points:</div>
+          <ul>
+            <li><strong>Inertia:</strong> Objects resist changes in motion based on their mass</li>
+            <li><strong>At Rest:</strong> Objects stay at rest unless a force acts on them</li>
+            <li><strong>In Motion:</strong> Objects continue moving at constant velocity unless a force acts on them</li>
+            <li><strong>No Net Force:</strong> Means no acceleration (ΣF = 0 → a = 0)</li>
+            <li><strong>Force Required:</strong> You need force to change motion, not to maintain it</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Resources -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">📚</span> Explore More
+      </div>
+      <div class="resources">
+        <div class="resource-card" onclick="window.location.href='newtons-second-law.html'">
+          <div class="resource-icon">⚡</div>
+          <div class="resource-title">Second Law</div>
+          <p>Learn F = ma and how force affects acceleration</p>
+        </div>
+        <div class="resource-card" onclick="window.location.href='newtons-third-law.html'">
+          <div class="resource-icon">🔄</div>
+          <div class="resource-title">Third Law</div>
+          <p>Explore action and reaction forces</p>
+        </div>
+        <div class="resource-card" onclick="window.location.href='newtons-laws-video.html'">
+          <div class="resource-icon">▶️</div>
+          <div class="resource-title">Video Lectures</div>
+          <p>Watch comprehensive video explanations</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-links">
+      <a href="index.html">← Back to Simulation</a>
+      <a href="newtons-second-law.html">Next: Second Law →</a>
+      <a href="newtons-laws-video.html">Watch Videos</a>
+    </div>
+    <p>🎓 PALI Physics Learning Platform | Newton's Laws Series</p>
+    <p style="font-size: 0.85rem; margin-top: 1rem;">
+      Created to help students understand physics through interactive simulations and comprehensive notes
+    </p>
+  </div>
+
+  <script>
+    // Diagram Drawing Function
+    function drawFirstLawDiagram() {
+      const canvas = document.getElementById('diagramCanvas1');
+      const ctx = canvas.getContext('2d');
+
+      // Clear canvas
+      ctx.fillStyle = '#0a0e27';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Title
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 18px Segoe UI';
+      ctx.textAlign = 'left';
+      ctx.fillText("Newton's First Law: F = 0 → a = 0", 30, 30);
+
+      // Section 1: At Rest
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = '14px Segoe UI';
+      ctx.fillText('Scenario 1: Object at Rest (No Net Force)', 30, 70);
+
+      // Draw resting object
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillRect(40, 90, 60, 40);
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = 'bold 12px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('Object', 70, 115);
+
+      ctx.fillStyle = '#4ade80';
+      ctx.font = '12px Segoe UI';
+      ctx.textAlign = 'left';
+      ctx.fillText('✓ At Rest', 130, 100);
+      ctx.fillText('✓ No Motion', 130, 120);
+      ctx.fillText('✓ v = 0 m/s', 130, 140);
+
+      // Section 2: In Motion - Constant Velocity
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = '14px Segoe UI';
+      ctx.fillText('Scenario 2: Object in Motion (No Net Force)', 30, 200);
+
+      // Draw moving object with velocity arrow
+      ctx.fillStyle = '#60a5fa';
+      ctx.fillRect(40, 220, 60, 40);
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = 'bold 12px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('Object', 70, 245);
+
+      // Draw velocity arrow
+      ctx.strokeStyle = '#4ade80';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(120, 245);
+      ctx.lineTo(200, 245);
+      ctx.stroke();
+
+      // Arrow head
+      ctx.beginPath();
+      ctx.moveTo(200, 245);
+      ctx.lineTo(190, 240);
+      ctx.lineTo(190, 250);
+      ctx.closePath();
+      ctx.fillStyle = '#4ade80';
+      ctx.fill();
+
+      ctx.fillStyle = '#4ade80';
+      ctx.font = '12px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('Constant Velocity', 160, 275);
+
+      // Section 3: With External Force
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = '14px Segoe UI';
+      ctx.textAlign = 'left';
+      ctx.fillText('With External Force (F ≠ 0):', 30, 330);
+
+      // Object with force applied
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(40, 350, 60, 40);
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = 'bold 12px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('Object', 70, 375);
+
+      // Force arrow
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(120, 375);
+      ctx.lineTo(200, 375);
+      ctx.stroke();
+
+      // Arrow head
+      ctx.beginPath();
+      ctx.moveTo(200, 375);
+      ctx.lineTo(190, 370);
+      ctx.lineTo(190, 380);
+      ctx.closePath();
+      ctx.fillStyle = '#f59e0b';
+      ctx.fill();
+
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = '12px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('Force Applied → Acceleration', 160, 405);
+
+      // Formula box at bottom
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.2)';
+      ctx.fillRect(20, 430, 560, 50);
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(20, 430, 560, 50);
+
+      ctx.fillStyle = '#4ade80';
+      ctx.font = 'bold 14px Courier New';
+      ctx.textAlign = 'center';
+      ctx.fillText('If ΣF = 0  →  a = 0  →  Constant Velocity (or at rest)', 300, 460);
+    }
+
+    // Progress tracking
+    function updateProgress() {
+      const checklist = document.querySelectorAll('.checklist-check:checked');
+      const total = document.querySelectorAll('.checklist-check').length;
+      const percentage = Math.round((checklist.length / total) * 100);
+      
+      document.getElementById('progressFill').style.width = percentage + '%';
+      document.getElementById('progressPercent').textContent = percentage + '%';
+    }
+
+    // Event listeners
+    document.querySelectorAll('.checklist-check').forEach(checkbox => {
+      checkbox.addEventListener('change', updateProgress);
+    });
+
+    // Draw diagram on load
+    window.addEventListener('load', drawFirstLawDiagram);
+    window.addEventListener('resize', drawFirstLawDiagram);
+  </script>
+</body>
+</html>
