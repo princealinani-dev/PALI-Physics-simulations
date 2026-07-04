@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newton's Second Law of Motion - PALI Physics</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0a0e27;
+      --surface: #111d2e;
+      --surface-light: #1a2a3e;
+      --border: #2a3f5f;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --success: #4ade80;
+      --warning: #f59e0b;
+      --radius: 12px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, var(--bg) 0%, #0f1a35 100%);
+      color: var(--text);
+      line-height: 1.8;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: rgba(17, 29, 46, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .brand .icon {
+      font-size: 2rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 0.7rem 1.5rem;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Progress Tracker */
+    .progress-tracker {
+      background: var(--surface-light);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .progress-tracker-title {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      min-width: 200px;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--success));
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 10px;
+    }
+
+    .progress-percentage {
+      font-weight: 700;
+      color: var(--success);
+      min-width: 60px;
+      text-align: right;
+    }
+
+    /* Section */
+    .section {
+      background: var(--surface-light);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .section-title .icon {
+      font-size: 2rem;
+    }
+
+    .section-content {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .subsection {
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+    }
+
+    .subsection-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--success);
+      margin-bottom: 0.8rem;
+    }
+
+    .formula-box {
+      background: rgba(56, 189, 248, 0.1);
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      font-family: 'Courier New', monospace;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--success);
+    }
+
+    .formula-description {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* Diagram Container */
+    .diagram-container {
+      background: rgba(255, 255, 255, 0.02);
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 350px;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    canvas {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    /* Example Box */
+    .example-box {
+      background: rgba(74, 222, 128, 0.1);
+      border-left: 4px solid var(--success);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .example-title {
+      font-weight: 700;
+      color: var(--success);
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Key Points */
+    .key-points {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 4px solid var(--warning);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .key-points-title {
+      font-weight: 700;
+      color: var(--warning);
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .key-points ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .key-points li {
+      padding: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .key-points li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    /* Learning Resources */
+    .resources {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .resource-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .resource-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(56, 189, 248, 0.2);
+    }
+
+    .resource-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .resource-title {
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      margin-top: 3rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-hover);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .header {
+        padding: 1rem;
+        flex-direction: column;
+      }
+
+      .brand {
+        font-size: 1.2rem;
+      }
+
+      .section {
+        padding: 1.5rem;
+      }
+
+      .section-title {
+        font-size: 1.4rem;
+      }
+
+      .progress-tracker {
+        flex-direction: column;
+      }
+
+      .progress-tracker-title {
+        width: 100%;
+      }
+
+      .diagram-container {
+        min-height: 300px;
+        padding: 1rem;
+      }
+    }
+
+    /* Reading Time Estimate */
+    .reading-time {
+      display: flex;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: rgba(56, 189, 248, 0.1);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .reading-time-item {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* Interactive Checkbox Tracking */
+    .checklist {
+      display: grid;
+      gap: 0.8rem;
+      margin: 1.5rem 0;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .checklist-item input {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+
+    .checklist-item:has(input:checked) {
+      background: rgba(74, 222, 128, 0.1);
+      border-color: var(--success);
+    }
+
+    .checklist-item label {
+      cursor: pointer;
+      flex: 1;
+    }
+
+    /* Comparison Table */
+    .comparison-table {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 1rem;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.01);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">
+      <span class="icon">⚛️</span> PALI Physics
+      <span style="color: var(--accent); margin-left: 0.5rem;">Second Law</span>
+    </div>
+    <div class="header-actions">
+      <a href="index.html" class="btn">← Back to Simulation</a>
+      <a href="newtons-laws-video.html" class="btn btn-primary">▶️ Watch Videos</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Reading Time & Progress -->
+    <div class="reading-time">
+      <div class="reading-time-item">📚 Reading Time: <strong>~10 minutes</strong></div>
+      <div class="reading-time-item">📊 Difficulty: <strong>Intermediate</strong></div>
+    </div>
+
+    <!-- Progress Tracker -->
+    <div class="progress-tracker">
+      <div class="progress-tracker-title">Your Learning Progress</div>
+      <div style="flex: 1; display: flex; gap: 1rem; align-items: center;">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-percentage" id="progressPercent">0%</div>
+      </div>
+    </div>
+
+    <!-- Definition Section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">📖</span> Definition & Core Concept
+      </div>
+      <div class="section-content">
+        <div class="subsection">
+          <div class="subsection-title">What is Newton's Second Law?</div>
+          <p>
+            <strong>Newton's Second Law of Motion</strong> is the most important law of motion. It explains the relationship between force, mass, and acceleration.
+          </p>
+          <div class="formula-box">
+            F = m × a
+          </div>
+          <div class="formula-description">
+            Force equals mass times acceleration
+          </div>
+          <p style="margin-top: 1.5rem;">
+            This law tells us that <strong>acceleration is directly proportional to the applied force</strong> 
+            and <strong>inversely proportional to the mass</strong> of the object. In simpler terms: the more force you apply to an object, 
+            the faster it accelerates; the heavier the object, the slower it accelerates (for the same force).
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- The Formula Explained -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">∑</span> Understanding the Formula
+      </div>
+      <div class="section-content">
+        <div class="subsection">
+          <div class="subsection-title">Formula: F = m × a</div>
+          <div class="key-points">
+            <div class="key-points-title">Variables Explained:</div>
+            <ul>
+              <li><strong>F</strong> = Net Force (Newtons, N) = kg·m/s²</li>
+              <li><strong>m</strong> = Mass (kilograms, kg)</li>
+              <li><strong>a</strong> = Acceleration (meters per second squared, m/s²)</li>
+            </ul>
+          </div>
+
+          <div class="example-box">
+            <div class="example-title">Example: Pushing a Cart</div>
+            <p>
+              If you push a 10 kg cart with a force of 50 N, the acceleration will be:<br>
+              <strong>a = F ÷ m = 50 N ÷ 10 kg = 5 m/s²</strong>
+            </p>
+            <p style="margin-top: 0.8rem;">
+              The cart accelerates at 5 meters per second squared.
+            </p>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Alternative Forms:</div>
+          
+          <div class="formula-box">
+            a = F / m
+          </div>
+          <div class="formula-description">
+            Acceleration equals force divided by mass
+          </div>
+
+          <div class="formula-box" style="margin-top: 1.5rem;">
+            m = F / a
+          </div>
+          <div class="formula-description">
+            Mass equals force divided by acceleration
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Relationships -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🔗</span> Key Relationships
+      </div>
+      <div class="section-content">
+        <div class="subsection">
+          <div class="subsection-title">Direct Proportionality: Force & Acceleration</div>
+          <p>
+            If you <strong>double the force</strong>, you <strong>double the acceleration</strong> (keeping mass constant).
+          </p>
+          <div class="example-box">
+            <div class="example-title">Example:</div>
+            <p>
+              • Force = 10 N, Mass = 2 kg → Acceleration = 5 m/s²<br>
+              • Force = 20 N, Mass = 2 kg → Acceleration = 10 m/s²<br>
+              <strong>→ Doubling force doubles acceleration</strong>
+            </p>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Inverse Proportionality: Mass & Acceleration</div>
+          <p>
+            If you <strong>double the mass</strong>, you <strong>halve the acceleration</strong> (keeping force constant).
+          </p>
+          <div class="example-box">
+            <div class="example-title">Example:</div>
+            <p>
+              • Force = 20 N, Mass = 2 kg → Acceleration = 10 m/s²<br>
+              • Force = 20 N, Mass = 4 kg → Acceleration = 5 m/s²<br>
+              <strong>→ Doubling mass halves acceleration</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Diagram Section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">📐</span> Visual Representation
+      </div>
+      <div class="diagram-container">
+        <canvas id="diagramCanvas2" width="600" height="400"></canvas>
+      </div>
+      <p style="text-align: center; color: var(--text-muted); margin-top: 1rem;">
+        <em>Diagram showing: How force affects acceleration and the relationship with mass</em>
+      </p>
+    </div>
+
+    <!-- Real-World Examples -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🌍</span> Real-World Applications
+      </div>
+      <div class="section-content">
+        <div class="example-box">
+          <div class="example-title">Example 1: Accelerating a Car</div>
+          <p>
+            A 1000 kg car with an engine producing 5000 N of force will accelerate at:<br>
+            <strong>a = 5000 N ÷ 1000 kg = 5 m/s²</strong><br>
+            A heavier car (2000 kg) with the same engine will only accelerate at 2.5 m/s².
+          </p>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">Example 2: Throwing a Ball vs. Throwing a Rock</div>
+          <p>
+            If you apply the same force throwing a light ball and a heavy rock, 
+            the ball accelerates faster because it has less mass.
+          </p>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">Example 3: Rocket Launch</div>
+          <p>
+            Rockets produce massive thrust (force). Initially, with full fuel load (large mass), 
+            acceleration is moderate. As fuel burns, mass decreases, so the same thrust produces greater acceleration.
+          </p>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">Example 4: Impact Force in Collisions</div>
+          <p>
+            A heavy truck (large mass) traveling at high speed requires enormous force to stop quickly, 
+            which is why high-speed truck collisions are so destructive.
+          </p>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">Example 5: Skateboard Physics</div>
+          <p>
+            Pushing a light skateboard produces quick acceleration. Adding weight (a person) to the skateboard 
+            increases mass, requiring more force for the same acceleration.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Units & Conversion -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">⚙️</span> Units & Conversions
+      </div>
+      <div class="section-content">
+        <div class="subsection">
+          <div class="subsection-title">Newton: Unit of Force</div>
+          <p>
+            One Newton (N) is the amount of force needed to accelerate a 1 kg object at 1 m/s².
+          </p>
+          <div class="formula-box">
+            1 N = 1 kg·m/s²
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Common Conversions:</div>
+          <ul style="margin-left: 1.5rem;">
+            <li>1 Newton ≈ 0.225 pounds-force (lbf)</li>
+            <li>1 pound-force ≈ 4.45 Newtons</li>
+            <li>1 kg ≈ 9.8 N of weight force (on Earth)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison with Other Laws -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">📊</span> Comparison Table
+      </div>
+      <div class="comparison-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Newton's Law</th>
+              <th>Statement</th>
+              <th>Formula</th>
+              <th>Key Idea</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>First Law</strong></td>
+              <td>Objects resist change in motion</td>
+              <td>ΣF = 0 → a = 0</td>
+              <td>Inertia</td>
+            </tr>
+            <tr>
+              <td><strong>Second Law</strong></td>
+              <td>Force causes acceleration</td>
+              <td>F = m × a</td>
+              <td>Force & Acceleration</td>
+            </tr>
+            <tr>
+              <td><strong>Third Law</strong></td>
+              <td>Action & reaction are equal</td>
+              <td>F₁ = -F₂</td>
+              <td>Interaction Pairs</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Problem-Solving Guide -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🔍</span> Problem-Solving Steps
+      </div>
+      <div class="section-content">
+        <div class="subsection">
+          <div class="subsection-title">How to Solve F = ma Problems:</div>
+          <div style="margin-top: 1rem;">
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+              <div style="background: var(--accent); color: #000; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; flex-shrink: 0;">1</div>
+              <div>
+                <strong>Identify what you know:</strong> List the given values (F, m, or a)
+              </div>
+            </div>
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+              <div style="background: var(--accent); color: #000; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; flex-shrink: 0;">2</div>
+              <div>
+                <strong>Identify what you need to find:</strong> Which variable are you solving for?
+              </div>
+            </div>
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+              <div style="background: var(--accent); color: #000; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; flex-shrink: 0;">3</div>
+              <div>
+                <strong>Choose the right formula:</strong> F = ma, a = F/m, or m = F/a
+              </div>
+            </div>
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+              <div style="background: var(--accent); color: #000; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; flex-shrink: 0;">4</div>
+              <div>
+                <strong>Substitute the values:</strong> Plug in numbers with units
+              </div>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+              <div style="background: var(--accent); color: #000; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; flex-shrink: 0;">5</div>
+              <div>
+                <strong>Calculate and check units:</strong> Ensure answer has correct units
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">Complete Example:</div>
+          <p><strong>Problem:</strong> A 5 kg object is pushed with a force of 20 N. What is its acceleration?</p>
+          <p style="margin-top: 0.8rem;">
+            <strong>Step 1-2:</strong> Given: m = 5 kg, F = 20 N; Find: a<br>
+            <strong>Step 3:</strong> Use: a = F/m<br>
+            <strong>Step 4:</strong> a = 20 N ÷ 5 kg<br>
+            <strong>Step 5:</strong> a = 4 m/s² ✓
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Learning Checklist -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">✅</span> Learning Checklist
+      </div>
+      <div class="checklist">
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I understand Newton's Second Law (F = ma)
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I can identify force, mass, and acceleration
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I understand the relationship between force and acceleration
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I understand the relationship between mass and acceleration
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I can solve F = ma problems
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I know real-world applications of this law
+        </label>
+      </div>
+    </div>
+
+    <!-- Key Takeaways -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🎓</span> Key Takeaways
+      </div>
+      <div class="section-content">
+        <div class="key-points">
+          <div class="key-points-title">Remember These Points:</div>
+          <ul>
+            <li><strong>F = m × a</strong> is the most important equation in mechanics</li>
+            <li><strong>Force causes acceleration:</strong> More force → more acceleration</li>
+            <li><strong>Mass resists acceleration:</strong> More mass → less acceleration</li>
+            <li><strong>Newton (N):</strong> Unit of force = kg·m/s²</li>
+            <li><strong>Direct proportion:</strong> F and a increase/decrease together</li>
+            <li><strong>Inverse proportion:</strong> m and a increase/decrease oppositely</li>
+            <li><strong>All three variables matter:</strong> You need to know the relationships between them</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Resources -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">📚</span> Explore More
+      </div>
+      <div class="resources">
+        <div class="resource-card" onclick="window.location.href='newtons-first-law.html'">
+          <div class="resource-icon">📖</div>
+          <div class="resource-title">First Law</div>
+          <p>Review Newton's First Law and inertia</p>
+        </div>
+        <div class="resource-card" onclick="window.location.href='newtons-third-law.html'">
+          <div class="resource-icon">🔄</div>
+          <div class="resource-title">Third Law</div>
+          <p>Explore action and reaction forces</p>
+        </div>
+        <div class="resource-card" onclick="window.location.href='newtons-laws-video.html'">
+          <div class="resource-icon">▶️</div>
+          <div class="resource-title">Video Lectures</div>
+          <p>Watch comprehensive video explanations</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-links">
+      <a href="index.html">← Back to Simulation</a>
+      <a href="newtons-third-law.html">Next: Third Law →</a>
+      <a href="newtons-laws-video.html">Watch Videos</a>
+    </div>
+    <p>🎓 PALI Physics Learning Platform | Newton's Laws Series</p>
+    <p style="font-size: 0.85rem; margin-top: 1rem;">
+      Created to help students understand physics through interactive simulations and comprehensive notes
+    </p>
+  </div>
+
+  <script>
+    // Diagram Drawing Function
+    function drawSecondLawDiagram() {
+      const canvas = document.getElementById('diagramCanvas2');
+      const ctx = canvas.getContext('2d');
+
+      // Clear canvas
+      ctx.fillStyle = '#0a0e27';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Title
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 18px Segoe UI';
+      ctx.textAlign = 'left';
+      ctx.fillText("Newton's Second Law: F = m × a", 30, 30);
+
+      // Section 1: Same Mass, Different Forces
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = '14px Segoe UI';
+      ctx.fillText('Effect of Force (Same Mass = 2 kg)', 30, 70);
+
+      // Object 1: Small Force
+      ctx.fillStyle = '#60a5fa';
+      ctx.fillRect(40, 90, 50, 35);
+      ctx.fillStyle = '#000';
+      ctx.font = 'bold 10px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('2kg', 65, 110);
+
+      // Force arrow 1
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(100, 107);
+      ctx.lineTo(140, 107);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(140, 107);
+      ctx.lineTo(132, 102);
+      ctx.lineTo(132, 112);
+      ctx.closePath();
+      ctx.fillStyle = '#f59e0b';
+      ctx.fill();
+
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = '11px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('10 N', 120, 125);
+      ctx.fillStyle = '#4ade80';
+      ctx.fillText('a = 5 m/s²', 120, 145);
+
+      // Object 2: Large Force
+      ctx.fillStyle = '#60a5fa';
+      ctx.fillRect(40, 160, 50, 35);
+      ctx.fillStyle = '#000';
+      ctx.font = 'bold 10px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('2kg', 65, 180);
+
+      // Force arrow 2 (larger)
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(100, 177);
+      ctx.lineTo(170, 177);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(170, 177);
+      ctx.lineTo(160, 172);
+      ctx.lineTo(160, 182);
+      ctx.closePath();
+      ctx.fillStyle = '#ef4444';
+      ctx.fill();
+
+      ctx.fillStyle = '#ef4444';
+      ctx.font = '11px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('20 N', 135, 195);
+      ctx.fillStyle = '#4ade80';
+      ctx.fillText('a = 10 m/s²', 135, 215);
+
+      // Section 2: Same Force, Different Mass
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = '14px Segoe UI';
+      ctx.textAlign = 'left';
+      ctx.fillText('Effect of Mass (Same Force = 20 N)', 30, 260);
+
+      // Object 3: Small Mass
+      ctx.fillStyle = '#4ade80';
+      ctx.fillRect(40, 280, 40, 30);
+      ctx.fillStyle = '#000';
+      ctx.font = 'bold 10px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('1kg', 60, 298);
+
+      // Force arrow 3
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(90, 295);
+      ctx.lineTo(170, 295);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(170, 295);
+      ctx.lineTo(160, 290);
+      ctx.lineTo(160, 300);
+      ctx.closePath();
+      ctx.fillStyle = '#f59e0b';
+      ctx.fill();
+
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = '11px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('20 N', 130, 313);
+      ctx.fillStyle = '#4ade80';
+      ctx.fillText('a = 20 m/s²', 130, 333);
+
+      // Object 4: Large Mass
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(40, 350, 60, 35);
+      ctx.fillStyle = '#000';
+      ctx.font = 'bold 10px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('4kg', 70, 370);
+
+      // Force arrow 4
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(110, 367);
+      ctx.lineTo(170, 367);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(170, 367);
+      ctx.lineTo(160, 362);
+      ctx.lineTo(160, 372);
+      ctx.closePath();
+      ctx.fillStyle = '#f59e0b';
+      ctx.fill();
+
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = '11px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('20 N', 140, 385);
+      ctx.fillStyle = '#60a5fa';
+      ctx.fillText('a = 5 m/s²', 140, 405);
+    }
+
+    // Progress tracking
+    function updateProgress() {
+      const checklist = document.querySelectorAll('.checklist-check:checked');
+      const total = document.querySelectorAll('.checklist-check').length;
+      const percentage = Math.round((checklist.length / total) * 100);
+      
+      document.getElementById('progressFill').style.width = percentage + '%';
+      document.getElementById('progressPercent').textContent = percentage + '%';
+    }
+
+    // Event listeners
+    document.querySelectorAll('.checklist-check').forEach(checkbox => {
+      checkbox.addEventListener('change', updateProgress);
+    });
+
+    // Draw diagram on load
+    window.addEventListener('load', drawSecondLawDiagram);
+    window.addEventListener('resize', drawSecondLawDiagram);
+  </script>
+</body>
+</html>
