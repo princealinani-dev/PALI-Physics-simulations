@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newton's Third Law of Motion - PALI Physics</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0a0e27;
+      --surface: #111d2e;
+      --surface-light: #1a2a3e;
+      --border: #2a3f5f;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --success: #4ade80;
+      --warning: #f59e0b;
+      --radius: 12px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, var(--bg) 0%, #0f1a35 100%);
+      color: var(--text);
+      line-height: 1.8;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: rgba(17, 29, 46, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .brand .icon {
+      font-size: 2rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 0.7rem 1.5rem;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Progress Tracker */
+    .progress-tracker {
+      background: var(--surface-light);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .progress-tracker-title {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      min-width: 200px;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--success));
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 10px;
+    }
+
+    .progress-percentage {
+      font-weight: 700;
+      color: var(--success);
+      min-width: 60px;
+      text-align: right;
+    }
+
+    /* Section */
+    .section {
+      background: var(--surface-light);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .section-title .icon {
+      font-size: 2rem;
+    }
+
+    .section-content {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .subsection {
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+    }
+
+    .subsection-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--success);
+      margin-bottom: 0.8rem;
+    }
+
+    .formula-box {
+      background: rgba(56, 189, 248, 0.1);
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      font-family: 'Courier New', monospace;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--success);
+    }
+
+    .formula-description {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* Diagram Container */
+    .diagram-container {
+      background: rgba(255, 255, 255, 0.02);
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 350px;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    canvas {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    /* Example Box */
+    .example-box {
+      background: rgba(74, 222, 128, 0.1);
+      border-left: 4px solid var(--success);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .example-title {
+      font-weight: 700;
+      color: var(--success);
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Key Points */
+    .key-points {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 4px solid var(--warning);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .key-points-title {
+      font-weight: 700;
+      color: var(--warning);
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .key-points ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .key-points li {
+      padding: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .key-points li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    /* Learning Resources */
+    .resources {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .resource-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .resource-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(56, 189, 248, 0.2);
+    }
+
+    .resource-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .resource-title {
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      margin-top: 3rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-hover);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .header {
+        padding: 1rem;
+        flex-direction: column;
+      }
+
+      .brand {
+        font-size: 1.2rem;
+      }
+
+      .section {
+        padding: 1.5rem;
+      }
+
+      .section-title {
+        font-size: 1.4rem;
+      }
+
+      .progress-tracker {
+        flex-direction: column;
+      }
+
+      .progress-tracker-title {
+        width: 100%;
+      }
+
+      .diagram-container {
+        min-height: 300px;
+        padding: 1rem;
+      }
+    }
+
+    /* Reading Time Estimate */
+    .reading-time {
+      display: flex;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: rgba(56, 189, 248, 0.1);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .reading-time-item {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* Interactive Checkbox Tracking */
+    .checklist {
+      display: grid;
+      gap: 0.8rem;
+      margin: 1.5rem 0;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .checklist-item input {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+
+    .checklist-item:has(input:checked) {
+      background: rgba(74, 222, 128, 0.1);
+      border-color: var(--success);
+    }
+
+    .checklist-item label {
+      cursor: pointer;
+      flex: 1;
+    }
+
+    /* Force Pair Container */
+    .force-pair {
+      background: rgba(56, 189, 248, 0.1);
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .force-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .force-label {
+      font-weight: 700;
+      color: var(--success);
+    }
+
+    .force-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+      .force-pair {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">
+      <span class="icon">⚛️</span> PALI Physics
+      <span style="color: var(--accent); margin-left: 0.5rem;">Third Law</span>
+    </div>
+    <div class="header-actions">
+      <a href="index.html" class="btn">← Back to Simulation</a>
+      <a href="newtons-laws-video.html" class="btn btn-primary">▶️ Watch Videos</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Reading Time & Progress -->
+    <div class="reading-time">
+      <div class="reading-time-item">📚 Reading Time: <strong>~9 minutes</strong></div>
+      <div class="reading-time-item">📊 Difficulty: <strong>Intermediate</strong></div>
+    </div>
+
+    <!-- Progress Tracker -->
+    <div class="progress-tracker">
+      <div class="progress-tracker-title">Your Learning Progress</div>
+      <div style="flex: 1; display: flex; gap: 1rem; align-items: center;">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-percentage" id="progressPercent">0%</div>
+      </div>
+    </div>
+
+    <!-- Definition Section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">📖</span> Definition & Core Concept
+      </div>
+      <div class="section-content">
+        <div class="subsection">
+          <div class="subsection-title">What is Newton's Third Law?</div>
+          <p>
+            <strong>Newton's Third Law of Motion</strong> describes the relationship between action and reaction forces.
+          </p>
+          <div class="formula-box">
+            For every action, there is an equal and opposite reaction.<br>
+            or<br>
+            F₁ = -F₂
+          </div>
+          <div class="formula-description">
+            If object A exerts a force on object B, then object B exerts an equal and opposite force on object A.
+          </div>
+          <p style="margin-top: 1.5rem;">
+            This law states that forces always come in pairs. When one object exerts a force on another object, 
+            the second object exerts a force back on the first object. These two forces are always equal in magnitude 
+            and opposite in direction. Importantly, <strong>action and reaction forces act on different objects</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Understanding Action & Reaction -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🔄</span> Action & Reaction Pairs
+      </div>
+      <div class="section-content">
+        <div class="subsection">
+          <div class="subsection-title">What Makes an Action-Reaction Pair?</div>
+          
+          <div class="key-points">
+            <div class="key-points-title">Characteristics of Force Pairs:</div>
+            <ul>
+              <li><strong>Equal magnitude:</strong> Both forces have the same strength</li>
+              <li><strong>Opposite direction:</strong> Forces point in opposite directions</li>
+              <li><strong>Same type:</strong> Both are the same type of force (both contact, both gravitational, etc.)</li>
+              <li><strong>Act on different objects:</strong> Each force acts on a different object</li>
+              <li><strong>Occur simultaneously:</strong> Both forces exist at the same time</li>
+            </ul>
+          </div>
+
+          <div class="example-box">
+            <div class="example-title">Example: You Push a Wall</div>
+            <p>
+              <strong>Action:</strong> You push the wall with 100 N to the right.<br>
+              <strong>Reaction:</strong> The wall pushes you with 100 N to the left.<br>
+              <strong>Result:</strong> You feel pushed back (you don't go through the wall).
+            </p>
+          </div>
+
+          <div class="force-pair">
+            <div class="force-item">
+              <div class="force-label">Action Force</div>
+              <div class="force-desc">Applied BY object A, TO object B</div>
+              <div style="margin-top: 0.5rem; font-size: 1.1rem; color: var(--success);">→ Direction: Right</div>
+            </div>
+            <div class="force-item">
+              <div class="force-label">Reaction Force</div>
+              <div class="force-desc">Applied BY object B, TO object A</div>
+              <div style="margin-top: 0.5rem; font-size: 1.1rem; color: var(--warning);">← Direction: Left</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Common Misconceptions -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">⚠️</span> Common Misconceptions
+      </div>
+      <div class="section-content">
+        <div class="subsection">
+          <div class="subsection-title">Myth 1: Action and Reaction Cancel Out</div>
+          <p>
+            <strong>FALSE!</strong> Action and reaction forces act on <strong>different objects</strong>, 
+            so they do NOT cancel out. They cannot be added together to find a net force.
+          </p>
+          <p style="margin-top: 0.8rem; color: var(--success);">
+            ✓ Correct: Action and reaction are always in equilibrium separately for their respective objects.
+          </p>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Myth 2: One Object "Wins"</div>
+          <p>
+            <strong>FALSE!</strong> Neither object "overpowers" the other. The forces are ALWAYS equal.
+          </p>
+          <p style="margin-top: 0.8rem;">
+            Whether an object accelerates depends on the <strong>net force on that object</strong> 
+            (considering ALL forces acting on it, not just the reaction force).
+          </p>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Myth 3: Heavy Objects Don't Feel Reaction Forces</div>
+          <p>
+            <strong>FALSE!</strong> ALL objects, regardless of mass, experience reaction forces.
+          </p>
+          <p style="margin-top: 0.8rem;">
+            A heavy object experiences the same reaction force as a light object—it just doesn't 
+            accelerate as much due to its greater mass (Newton's Second Law: a = F/m).
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Diagram Section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">📐</span> Visual Representation
+      </div>
+      <div class="diagram-container">
+        <canvas id="diagramCanvas3" width="600" height="400"></canvas>
+      </div>
+      <p style="text-align: center; color: var(--text-muted); margin-top: 1rem;">
+        <em>Diagram showing: Action and reaction force pairs in different scenarios</em>
+      </p>
+    </div>
+
+    <!-- Real-World Examples -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🌍</span> Real-World Examples
+      </div>
+      <div class="section-content">
+        <div class="example-box">
+          <div class="example-title">Example 1: Walking</div>
+          <p>
+            <strong>Action:</strong> Your foot pushes backward on the ground.<br>
+            <strong>Reaction:</strong> The ground pushes forward on your foot.<br>
+            <strong>Result:</strong> You move forward. Without this reaction force, you couldn't walk!
+          </p>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">Example 2: Swimming</div>
+          <p>
+            <strong>Action:</strong> A swimmer pushes water backward with their arms and legs.<br>
+            <strong>Reaction:</strong> Water pushes the swimmer forward.<br>
+            <strong>Result:</strong> The swimmer moves through the water.
+          </p>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">Example 3: Rocket Launch</div>
+          <p>
+            <strong>Action:</strong> Rocket expels hot gases downward with great force.<br>
+            <strong>Reaction:</strong> Gases push the rocket upward with equal force.<br>
+            <strong>Result:</strong> The rocket accelerates upward into space. (This is Newton's Third Law in action!)
+          </p>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">Example 4: Jumping</div>
+          <p>
+            <strong>Action:</strong> Your legs push down on the ground with force.<br>
+            <strong>Reaction:</strong> The ground pushes up on you with equal force.<br>
+            <strong>Result:</strong> You launch into the air. The stronger you push down, the higher you jump!
+          </p>
+        </div>
+
+        <div class="example-box">
+          <div class="example-title">Example 5: Collision</div>
+          <p>
+            <strong>Action:</strong> Car A hits Car B with 5000 N of force to the right.<br>
+            <strong>Reaction:</strong> Car B hits Car A with 5000 N of force to the left.<br>
+            <strong>Result:</strong> Both cars feel equal impact forces. Their accelerations differ based on their masses.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mathematical Representation -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">∑</span> Mathematical Expression
+      </div>
+      <div class="section-content">
+        <div class="subsection">
+          <div class="formula-box">
+            F₁ = -F₂
+          </div>
+          <div class="formula-description">
+            Force on object 1 equals negative force on object 2
+          </div>
+
+          <p style="margin-top: 1.5rem;">
+            <strong>What this means:</strong>
+          </p>
+          <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+            <li><strong>F₁</strong> = force exerted BY object 1 ON object 2</li>
+            <li><strong>F₂</strong> = force exerted BY object 2 ON object 1</li>
+            <li><strong>Negative sign (-)</strong> = opposite direction</li>
+            <li><strong>Magnitude:</strong> |F₁| = |F₂| (same size)</li>
+          </ul>
+
+          <div class="example-box">
+            <div class="example-title">Mathematical Example:</div>
+            <p>
+              If object A pushes object B with a force of +100 N (to the right),<br>
+              then object B pushes object A with a force of -100 N (to the left).<br>
+              <strong>F₁ = -F₂ → 100 = -(-100) ✓</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Why Objects Move Differently -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🤔</span> Why Do Objects Move Differently?
+      </div>
+      <div class="section-content">
+        <div class="subsection">
+          <p>
+            Even though action and reaction forces are equal, objects may accelerate differently. 
+            This is because <strong>acceleration depends on MASS</strong>.
+          </p>
+
+          <div class="formula-box" style="margin-top: 1rem;">
+            a = F / m
+          </div>
+
+          <div class="example-box">
+            <div class="example-title">Why a Person Can't Push a Wall</div>
+            <p>
+              <strong>The forces are equal:</strong><br>
+              • You push wall: 100 N to the right<br>
+              • Wall pushes you: 100 N to the left<br><br>
+              <strong>But accelerations differ:</strong><br>
+              • Your mass: ~70 kg → a = 100 ÷ 70 = 1.43 m/s² (you move!)<br>
+              • Wall's mass: ~1,000,000 kg → a = 100 ÷ 1,000,000 = 0.0001 m/s² (barely moves!)
+            </p>
+          </div>
+
+          <p style="margin-top: 1.5rem;">
+            <strong>Key insight:</strong> The wall exerts just as much force on you as you exert on it! 
+            You move backward because you have less mass, not because the force on you is different.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Connecting the Three Laws -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🔗</span> How All Three Laws Connect
+      </div>
+      <div class="section-content">
+        <div class="subsection">
+          <table style="width: 100%; margin-top: 1rem;">
+            <thead>
+              <tr style="background: rgba(56, 189, 248, 0.2);">
+                <th style="padding: 1rem; border: 1px solid var(--border); text-align: left;"><strong>First Law</strong></th>
+                <th style="padding: 1rem; border: 1px solid var(--border); text-align: left;"><strong>Second Law</strong></th>
+                <th style="padding: 1rem; border: 1px solid var(--border); text-align: left;"><strong>Third Law</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 1rem; border: 1px solid var(--border);">No net force = no change in motion</td>
+                <td style="padding: 1rem; border: 1px solid var(--border);">Net force causes acceleration</td>
+                <td style="padding: 1rem; border: 1px solid var(--border);">Forces come in action-reaction pairs</td>
+              </tr>
+              <tr style="background: rgba(255, 255, 255, 0.02);">
+                <td style="padding: 1rem; border: 1px solid var(--border);">ΣF = 0 → a = 0</td>
+                <td style="padding: 1rem; border: 1px solid var(--border);">F = m × a</td>
+                <td style="padding: 1rem; border: 1px solid var(--border);">F₁ = -F₂</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Learning Checklist -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">✅</span> Learning Checklist
+      </div>
+      <div class="checklist">
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I understand Newton's Third Law
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I know action and reaction are equal and opposite
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I understand action-reaction pairs act on different objects
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I can identify action-reaction pairs in real situations
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I know why objects accelerate differently with equal forces
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" class="checklist-check"> I understand how all three laws work together
+        </label>
+      </div>
+    </div>
+
+    <!-- Key Takeaways -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🎓</span> Key Takeaways
+      </div>
+      <div class="section-content">
+        <div class="key-points">
+          <div class="key-points-title">Remember These Points:</div>
+          <ul>
+            <li><strong>F₁ = -F₂:</strong> Action and reaction forces are equal in magnitude and opposite in direction</li>
+            <li><strong>Different objects:</strong> Each force acts on a different object (crucial!)</li>
+            <li><strong>Same type:</strong> Both forces are the same type (both contact, both gravity, etc.)</li>
+            <li><strong>No cancellation:</strong> They don't cancel because they're on different objects</li>
+            <li><strong>Always occur together:</strong> One cannot exist without the other</li>
+            <li><strong>Mass matters:</strong> Different accelerations result from different masses, not different forces</li>
+            <li><strong>Universal principle:</strong> Applies to ALL forces: pushes, pulls, friction, gravity, etc.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Resources -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">📚</span> Explore More
+      </div>
+      <div class="resources">
+        <div class="resource-card" onclick="window.location.href='newtons-first-law.html'">
+          <div class="resource-icon">📖</div>
+          <div class="resource-title">First Law</div>
+          <p>Review Newton's First Law and inertia</p>
+        </div>
+        <div class="resource-card" onclick="window.location.href='newtons-second-law.html'">
+          <div class="resource-icon">⚡</div>
+          <div class="resource-title">Second Law</div>
+          <p>Learn F = ma and force relationships</p>
+        </div>
+        <div class="resource-card" onclick="window.location.href='newtons-laws-video.html'">
+          <div class="resource-icon">▶️</div>
+          <div class="resource-title">Video Lectures</div>
+          <p>Watch comprehensive video explanations</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-links">
+      <a href="index.html">← Back to Simulation</a>
+      <a href="newtons-laws-video.html">Watch Videos</a>
+      <a href="newtons-first-law.html">Review All Laws</a>
+    </div>
+    <p>🎓 PALI Physics Learning Platform | Newton's Laws Series</p>
+    <p style="font-size: 0.85rem; margin-top: 1rem;">
+      Created to help students understand physics through interactive simulations and comprehensive notes
+    </p>
+  </div>
+
+  <script>
+    // Diagram Drawing Function
+    function drawThirdLawDiagram() {
+      const canvas = document.getElementById('diagramCanvas3');
+      const ctx = canvas.getContext('2d');
+
+      // Clear canvas
+      ctx.fillStyle = '#0a0e27';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Title
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 18px Segoe UI';
+      ctx.textAlign = 'left';
+      ctx.fillText("Newton's Third Law: Action = -Reaction", 30, 30);
+
+      // Scenario 1: Two Blocks Colliding
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = '14px Segoe UI';
+      ctx.fillText('Scenario 1: Two Blocks Pushing Each Other', 30, 70);
+
+      // Block A
+      ctx.fillStyle = '#60a5fa';
+      ctx.fillRect(40, 90, 50, 50);
+      ctx.fillStyle = '#000';
+      ctx.font = 'bold 12px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('A', 65, 120);
+
+      // Block B
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(220, 90, 50, 50);
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 12px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('B', 245, 120);
+
+      // Force A→B
+      ctx.strokeStyle = '#4ade80';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(100, 115);
+      ctx.lineTo(210, 115);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(210, 115);
+      ctx.lineTo(200, 110);
+      ctx.lineTo(200, 120);
+      ctx.closePath();
+      ctx.fillStyle = '#4ade80';
+      ctx.fill();
+
+      ctx.fillStyle = '#4ade80';
+      ctx.font = 'bold 11px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('Action: 100 N →', 155, 85);
+
+      // Force B→A (opposite)
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(210, 140);
+      ctx.lineTo(100, 140);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(100, 140);
+      ctx.lineTo(110, 135);
+      ctx.lineTo(110, 145);
+      ctx.closePath();
+      ctx.fillStyle = '#f59e0b';
+      ctx.fill();
+
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = 'bold 11px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('← Reaction: 100 N', 155, 165);
+
+      // Scenario 2: Person Jumping
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = '14px Segoe UI';
+      ctx.textAlign = 'left';
+      ctx.fillText('Scenario 2: Person Pushing Ground', 30, 230);
+
+      // Person
+      ctx.fillStyle = '#60a5fa';
+      ctx.beginPath();
+      ctx.arc(80, 260, 15, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillRect(75, 280, 10, 30);
+      ctx.fillRect(80, 280, 10, 30);
+
+      // Ground line
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(30, 320);
+      ctx.lineTo(300, 320);
+      ctx.stroke();
+
+      // Force Person→Ground
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(80, 315);
+      ctx.lineTo(80, 340);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(80, 340);
+      ctx.lineTo(75, 330);
+      ctx.lineTo(85, 330);
+      ctx.closePath();
+      ctx.fillStyle = '#ef4444';
+      ctx.fill();
+
+      ctx.fillStyle = '#ef4444';
+      ctx.font = 'bold 11px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('Action: Push Down', 80, 360);
+
+      // Force Ground→Person (opposite)
+      ctx.strokeStyle = '#4ade80';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(80, 275);
+      ctx.lineTo(80, 250);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(80, 250);
+      ctx.lineTo(75, 260);
+      ctx.lineTo(85, 260);
+      ctx.closePath();
+      ctx.fillStyle = '#4ade80';
+      ctx.fill();
+
+      ctx.fillStyle = '#4ade80';
+      ctx.font = 'bold 11px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.fillText('Reaction: Push Up', 80, 235);
+    }
+
+    // Progress tracking
+    function updateProgress() {
+      const checklist = document.querySelectorAll('.checklist-check:checked');
+      const total = document.querySelectorAll('.checklist-check').length;
+      const percentage = Math.round((checklist.length / total) * 100);
+      
+      document.getElementById('progressFill').style.width = percentage + '%';
+      document.getElementById('progressPercent').textContent = percentage + '%';
+    }
+
+    // Event listeners
+    document.querySelectorAll('.checklist-check').forEach(checkbox => {
+      checkbox.addEventListener('change', updateProgress);
+    });
+
+    // Draw diagram on load
+    window.addEventListener('load', drawThirdLawDiagram);
+    window.addEventListener('resize', drawThirdLawDiagram);
+  </script>
+</body>
+</html>
