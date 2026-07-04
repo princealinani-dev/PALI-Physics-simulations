@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newton's Laws Video Lectures - PALI Physics</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0a0e27;
+      --surface: #111d2e;
+      --surface-light: #1a2a3e;
+      --border: #2a3f5f;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --success: #4ade80;
+      --warning: #f59e0b;
+      --radius: 12px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, var(--bg) 0%, #0f1a35 100%);
+      color: var(--text);
+      line-height: 1.8;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: rgba(17, 29, 46, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .brand .icon {
+      font-size: 2rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.7rem 1.5rem;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Section */
+    .section {
+      background: var(--surface-light);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .section-title .icon {
+      font-size: 2rem;
+    }
+
+    /* Video Grid */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .video-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-8px);
+      box-shadow: 0 12px 32px rgba(56, 189, 248, 0.2);
+    }
+
+    .video-thumbnail {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(74, 222, 128, 0.3));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      border-bottom: 2px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .video-play-button {
+      width: 80px;
+      height: 80px;
+      background: rgba(56, 189, 248, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: #000;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .video-card:hover .video-play-button {
+      background: var(--accent);
+      transform: scale(1.1);
+    }
+
+    .video-content {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .video-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .video-description {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    .video-duration {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .video-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .tag {
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--accent);
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--surface-light);
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 900px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 2rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .modal-close:hover {
+      color: var(--text);
+    }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2rem;
+    }
+
+    .video-player {
+      background: #000;
+      width: 100%;
+      height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .video-player iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .video-info {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .video-info-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--success);
+      margin-bottom: 0.8rem;
+    }
+
+    .video-info-text {
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Learning Path */
+    .learning-path {
+      background: rgba(56, 189, 248, 0.1);
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .path-item {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .path-number {
+      background: var(--accent);
+      color: #000;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .path-content {
+      flex: 1;
+    }
+
+    .path-title {
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+
+    .path-description {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Key Features */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .feature-title {
+      font-weight: 700;
+      color: var(--success);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-description {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--surface);
+      border-top: 2px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      margin-top: 3rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-hover);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .header {
+        padding: 1rem;
+        flex-direction: column;
+      }
+
+      .video-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-body {
+        padding: 1rem;
+      }
+
+      .video-player {
+        height: 300px;
+      }
+
+      .path-item {
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+
+      .path-number {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">
+      <span class="icon">▶️</span> PALI Physics
+      <span style="color: var(--accent); margin-left: 0.5rem;">Video Lectures</span>
+    </div>
+    <div class="header-actions">
+      <a href="index.html" class="btn">← Back to Simulation</a>
+      <a href="newtons-first-law.html" class="btn">📖 Reading Notes</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Introduction Section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🎓</span> Newton's Laws Video Lectures
+      </div>
+      <p style="margin-bottom: 1.5rem;">
+        Welcome to our comprehensive video lecture series on Newton's Laws of Motion! 
+        These videos explain each law clearly with visual demonstrations, real-world examples, and mathematical concepts.
+      </p>
+      <p>
+        <strong>How to use this resource:</strong> Click on any video card below to watch the full lecture. 
+        Each video includes timestamps, notes, and key concepts to help your learning journey.
+      </p>
+    </div>
+
+    <!-- Learning Path -->
+    <div class="learning-path">
+      <div style="font-size: 1.3rem; font-weight: 700; color: var(--accent); margin-bottom: 1.5rem;">
+        📚 Recommended Learning Path
+      </div>
+      
+      <div class="path-item">
+        <div class="path-number">1</div>
+        <div class="path-content">
+          <div class="path-title">Introduction to Newton's Laws</div>
+          <div class="path-description">Start here! Learn the foundation and overview of all three laws before diving deeper.</div>
+        </div>
+      </div>
+
+      <div class="path-item">
+        <div class="path-number">2</div>
+        <div class="path-content">
+          <div class="path-title">Newton's First Law (Law of Inertia)</div>
+          <div class="path-description">Understand objects at rest and in motion, and the concept of inertia.</div>
+        </div>
+      </div>
+
+      <div class="path-item">
+        <div class="path-number">3</div>
+        <div class="path-content">
+          <div class="path-title">Newton's Second Law (F = ma)</div>
+          <div class="path-description">Learn how force, mass, and acceleration relate to each other.</div>
+        </div>
+      </div>
+
+      <div class="path-item">
+        <div class="path-number">4</div>
+        <div class="path-content">
+          <div class="path-title">Newton's Third Law (Action & Reaction)</div>
+          <div class="path-description">Explore action-reaction force pairs and their applications.</div>
+        </div>
+      </div>
+
+      <div class="path-item">
+        <div class="path-number">5</div>
+        <div class="path-content">
+          <div class="path-title">Practical Applications & Problem Solving</div>
+          <div class="path-description">See how Newton's laws apply to real-world scenarios and solve complex problems.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Video Grid -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🎬</span> Video Lectures
+      </div>
+      
+      <div class="video-grid">
+        <!-- Video 1: Introduction -->
+        <div class="video-card" onclick="openVideo('intro')">
+          <div class="video-thumbnail">
+            <div style="position: absolute; z-index: 1;">📚</div>
+            <div class="video-play-button">▶</div>
+          </div>
+          <div class="video-content">
+            <div class="video-title">Introduction to Newton's Laws</div>
+            <div class="video-description">
+              Overview of all three Newton's laws, their significance in physics, and how they relate to each other.
+            </div>
+            <div class="video-duration">⏱️ ~12 minutes</div>
+            <div class="video-tags">
+              <span class="tag">Overview</span>
+              <span class="tag">Foundation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video 2: First Law -->
+        <div class="video-card" onclick="openVideo('first')">
+          <div class="video-thumbnail">
+            <div style="position: absolute; z-index: 1;">📖</div>
+            <div class="video-play-button">▶</div>
+          </div>
+          <div class="video-content">
+            <div class="video-title">First Law: Law of Inertia</div>
+            <div class="video-description">
+              Deep dive into Newton's First Law, inertia, and how objects behave without external forces.
+            </div>
+            <div class="video-duration">⏱️ ~14 minutes</div>
+            <div class="video-tags">
+              <span class="tag">First Law</span>
+              <span class="tag">Inertia</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video 3: Second Law -->
+        <div class="video-card" onclick="openVideo('second')">
+          <div class="video-thumbnail">
+            <div style="position: absolute; z-index: 1;">⚡</div>
+            <div class="video-play-button">▶</div>
+          </div>
+          <div class="video-content">
+            <div class="video-title">Second Law: F = ma</div>
+            <div class="video-description">
+              Explore the most important equation in mechanics. Learn how force affects acceleration and mass.
+            </div>
+            <div class="video-duration">⏱️ ~16 minutes</div>
+            <div class="video-tags">
+              <span class="tag">Second Law</span>
+              <span class="tag">F = ma</span>
+              <span class="tag">Mathematics</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video 4: Third Law -->
+        <div class="video-card" onclick="openVideo('third')">
+          <div class="video-thumbnail">
+            <div style="position: absolute; z-index: 1;">🔄</div>
+            <div class="video-play-button">▶</div>
+          </div>
+          <div class="video-content">
+            <div class="video-title">Third Law: Action & Reaction</div>
+            <div class="video-description">
+              Understand action-reaction force pairs and why they don't cancel each other out.
+            </div>
+            <div class="video-duration">⏱️ ~13 minutes</div>
+            <div class="video-tags">
+              <span class="tag">Third Law</span>
+              <span class="tag">Force Pairs</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video 5: Problem Solving -->
+        <div class="video-card" onclick="openVideo('problems')">
+          <div class="video-thumbnail">
+            <div style="position: absolute; z-index: 1;">🔍</div>
+            <div class="video-play-button">▶</div>
+          </div>
+          <div class="video-content">
+            <div class="video-title">Problem Solving Techniques</div>
+            <div class="video-description">
+              Learn systematic approaches to solve Newton's laws problems with step-by-step examples.
+            </div>
+            <div class="video-duration">⏱️ ~15 minutes</div>
+            <div class="video-tags">
+              <span class="tag">Problem Solving</span>
+              <span class="tag">Examples</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video 6: Applications -->
+        <div class="video-card" onclick="openVideo('applications')">
+          <div class="video-thumbnail">
+            <div style="position: absolute; z-index: 1;">🌍</div>
+            <div class="video-play-button">▶</div>
+          </div>
+          <div class="video-content">
+            <div class="video-title">Real-World Applications</div>
+            <div class="video-description">
+              See how Newton's laws apply to vehicles, sports, space exploration, and everyday situations.
+            </div>
+            <div class="video-duration">⏱️ ~18 minutes</div>
+            <div class="video-tags">
+              <span class="tag">Applications</span>
+              <span class="tag">Real-World</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Features -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">✨</span> What You'll Learn
+      </div>
+      
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <div class="feature-title">Comprehensive Concepts</div>
+          <div class="feature-description">
+            Detailed explanations of all three Newton's laws with mathematical foundations.
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <div class="feature-title">Visual Demonstrations</div>
+          <div class="feature-description">
+            Clear animations and diagrams showing forces, motion, and interactions.
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🧮</div>
+          <div class="feature-title">Problem Solving</div>
+          <div class="feature-description">
+            Step-by-step guidance on tackling physics problems using Newton's laws.
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🌍</div>
+          <div class="feature-title">Real Applications</div>
+          <div class="feature-description">
+            Learn how these laws apply to vehicles, sports, space, and everyday life.
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⚙️</div>
+          <div class="feature-title">Interactive Content</div>
+          <div class="feature-description">
+            Engage with interactive simulations and examples throughout the videos.
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">✅</div>
+          <div class="feature-title">Key Takeaways</div>
+          <div class="feature-description">
+            Summary of important concepts you should remember after each video.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Companion Resources -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">📖</span> Companion Resources
+      </div>
+      <p style="margin-bottom: 1.5rem;">
+        Enhance your learning with our comprehensive reading notes:
+      </p>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: 0.8rem;">📖</div>
+          <div style="font-weight: 700; color: var(--accent); margin-bottom: 0.5rem;">First Law Notes</div>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+            Detailed reading notes with diagrams, formulas, and examples
+          </p>
+          <a href="newtons-first-law.html" class="btn" style="justify-content: center;">Read Notes →</a>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: 0.8rem;">⚡</div>
+          <div style="font-weight: 700; color: var(--accent); margin-bottom: 0.5rem;">Second Law Notes</div>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+            Comprehensive guide to F = ma with practical examples
+          </p>
+          <a href="newtons-second-law.html" class="btn" style="justify-content: center;">Read Notes →</a>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: 0.8rem;">🔄</div>
+          <div style="font-weight: 700; color: var(--accent); margin-bottom: 0.5rem;">Third Law Notes</div>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+            Action-reaction pairs explained with diagrams and applications
+          </p>
+          <a href="newtons-third-law.html" class="btn" style="justify-content: center;">Read Notes →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Simulation -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🔬</span> Interactive Simulation
+      </div>
+      <p style="margin-bottom: 1.5rem;">
+        After watching the videos, test your understanding with our interactive 3D physics simulation:
+      </p>
+      <a href="index.html" class="btn btn-primary" style="font-size: 1rem; padding: 1rem 2rem;">
+        🚀 Launch Interactive Simulation →
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-links">
+      <a href="index.html">← Back to Simulation</a>
+      <a href="newtons-first-law.html">Reading Notes</a>
+      <a href="newtons-laws-video.html">Video Lectures</a>
+    </div>
+    <p>🎓 PALI Physics Learning Platform | Newton's Laws Complete Series</p>
+    <p style="font-size: 0.85rem; margin-top: 1rem;">
+      Created to help students understand physics through interactive simulations, comprehensive notes, and video lectures
+    </p>
+  </div>
+
+  <!-- Video Modal -->
+  <div class="modal" id="videoModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle">Video Title</div>
+        <button class="modal-close" onclick="closeVideo()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="video-player">
+          <iframe id="videoFrame" width="100%" height="100%" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-info">
+          <div class="video-info-title">Video Description</div>
+          <div class="video-info-text" id="modalDescription">
+            Video description and key points will appear here.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Video data
+    const videos = {
+      intro: {
+        title: "Introduction to Newton's Laws",
+        description: "This comprehensive introduction covers all three of Newton's laws of motion. Learn why these laws are fundamental to understanding physics, how they relate to each other, and their historical significance. Key topics include force, acceleration, mass, and the concept of inertia.",
+        url: "https://www.youtube.com/embed/kKKM8Y-lHDs"
+      },
+      first: {
+        title: "First Law: Law of Inertia",
+        description: "Dive deep into Newton's First Law of Motion. Understand what inertia is, how it relates to mass, and why objects behave the way they do when no forces act on them. Includes real-world examples like seatbelts, ice skating, and space travel.",
+        url: "https://www.youtube.com/embed/LWn0MaYvvdE"
+      },
+      second: {
+        title: "Second Law: F = ma",
+        description: "Explore the most important equation in mechanics. Learn how force, mass, and acceleration are related, how to solve F = ma problems, and why this law is so crucial. Includes demonstrations with different objects and forces.",
+        url: "https://www.youtube.com/embed/XRxIMW4e9Oo"
+      },
+      third: {
+        title: "Third Law: Action & Reaction",
+        description: "Understand Newton's Third Law and action-reaction force pairs. Learn why these forces don't cancel out, how they apply to different objects, and why this concept is essential for understanding motion. Includes swimming, rockets, and walking examples.",
+        url: "https://www.youtube.com/embed/Yiw57bnm88E"
+      },
+      problems: {
+        title: "Problem Solving Techniques",
+        description: "Master the systematic approach to solving Newton's laws problems. Learn how to identify forces, draw free-body diagrams, apply Newton's laws correctly, and check your answers. Includes multiple worked examples.",
+        url: "https://www.youtube.com/embed/4nlMDXH1rFQ"
+      },
+      applications: {
+        title: "Real-World Applications",
+        description: "See how Newton's laws apply to everyday situations and engineering challenges. Topics include vehicle dynamics, sports physics, space exploration, and structural engineering. Understand why these ancient laws are still relevant today.",
+        url: "https://www.youtube.com/embed/M3_9khG-vFg"
+      }
+    };
+
+    function openVideo(videoKey) {
+      const video = videos[videoKey];
+      document.getElementById('modalTitle').textContent = video.title;
+      document.getElementById('modalDescription').textContent = video.description;
+      document.getElementById('videoFrame').src = video.url;
+      document.getElementById('videoModal').classList.add('active');
+    }
+
+    function closeVideo() {
+      document.getElementById('videoModal').classList.remove('active');
+      document.getElementById('videoFrame').src = '';
+    }
+
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+      const modal = document.getElementById('videoModal');
+      if (e.target === modal) {
+        closeVideo();
+      }
+    });
+
+    // Close with Escape key
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeVideo();
+      }
+    });
+  </script>
+</body>
+</html>
