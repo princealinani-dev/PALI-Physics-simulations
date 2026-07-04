@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes, viewport-fit=cover">
+  <title>Newton's Laws of Motion - Reading Notes</title>
+  <style>
+    :root {
+      --bg: #080c14;
+      --surface: #111827;
+      --border: #1f2a3a;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --green: #4ade80;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --blue: #60a5fa;
+      --radius: 10px;
+      --shadow: 0 4px 20px rgba(0,0,0,0.5);
+      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    header h1 {
+      font-size: 2.5rem;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    header p {
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      margin-top: 15px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--accent));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 12px 20px;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    .tab-btn.active {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+    .tab-btn:hover {
+      border-color: var(--accent);
+    }
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .law-section {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow);
+    }
+    .law-section h2 {
+      color: var(--accent);
+      font-size: 2rem;
+      margin-bottom: 15px;
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 10px;
+    }
+    .law-section h3 {
+      color: var(--green);
+      font-size: 1.3rem;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    .law-section p {
+      color: #cbd5e1;
+      font-size: 1.05rem;
+      margin-bottom: 15px;
+    }
+    .formula-box {
+      background: rgba(56, 189, 248, 0.1);
+      border-left: 4px solid var(--accent);
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 1.1rem;
+      color: var(--blue);
+    }
+    .diagram-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px dashed var(--border);
+      padding: 25px;
+      margin: 20px 0;
+      border-radius: 8px;
+      text-align: center;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .svg-diagram {
+      max-width: 100%;
+      height: auto;
+    }
+    .key-points {
+      background: rgba(74, 222, 128, 0.1);
+      border-left: 4px solid var(--green);
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 6px;
+    }
+    .key-points ul {
+      list-style: none;
+      padding-left: 20px;
+    }
+    .key-points li {
+      margin: 8px 0;
+      color: #cbd5e1;
+      position: relative;
+    }
+    .key-points li:before {
+      content: "✓";
+      position: absolute;
+      left: -20px;
+      color: var(--green);
+      font-weight: bold;
+    }
+    .example-box {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 4px solid var(--yellow);
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 6px;
+      color: #fef3c7;
+    }
+    .back-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+    .back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+    }
+    .learning-indicator {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(74, 222, 128, 0.1);
+      border-radius: 6px;
+    }
+    .learning-indicator .status {
+      width: 30px;
+      height: 30px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #000;
+    }
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+      .tabs {
+        flex-direction: column;
+      }
+      .tab-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-button">← Back to Simulation</a>
+
+    <header>
+      <h1>⚛️ Newton's Laws of Motion</h1>
+      <p>Complete Reading Notes with Diagrams and Formulas</p>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <p style="margin-top: 10px; font-size: 0.9rem;">Reading Progress: <span id="progressText">0%</span></p>
+    </header>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(0)">📖 1st Law</button>
+      <button class="tab-btn" onclick="switchTab(1)">🔄 2nd Law</button>
+      <button class="tab-btn" onclick="switchTab(2)">⚡ 3rd Law</button>
+    </div>
+
+    <!-- FIRST LAW -->
+    <div id="tab-0" class="tab-content active">
+      <div class="law-section">
+        <h2>1st Law of Motion: Law of Inertia</h2>
+        
+        <p><strong>Statement:</strong> An object at rest remains at rest, and an object in motion remains in motion at a constant velocity unless acted upon by an external force.</p>
+        
+        <div class="formula-box">
+          <strong>ΣF = 0 ⟹ a = 0 (No acceleration)</strong>
+        </div>
+
+        <h3>Understanding the Concept</h3>
+        <p>Newton's First Law describes the concept of <strong>Inertia</strong>, which is the natural tendency of an object to resist changes in its state of motion. This law forms the foundation of Newton's mechanics and explains why we need forces to change motion.</p>
+
+        <div class="diagram-box">
+          <svg class="svg-diagram" viewBox="0 0 500 200" width="500" height="200">
+            <!-- At Rest -->
+            <circle cx="100" cy="100" r="20" fill="#4ade80"/>
+            <text x="100" y="150" text-anchor="middle" fill="#e2e8f0" font-size="16">Object at Rest</text>
+            <text x="100" y="170" text-anchor="middle" fill="#94a3b8" font-size="12">Stays at Rest</text>
+            
+            <!-- In Motion -->
+            <g>
+              <circle cx="350" cy="100" r="20" fill="#4ade80"/>
+              <path d="M 370 100 L 420 100" stroke="#60a5fa" stroke-width="3" marker-end="url(#arrowhead)"/>
+              <text x="350" y="150" text-anchor="middle" fill="#e2e8f0" font-size="16">Object in Motion</text>
+              <text x="350" y="170" text-anchor="middle" fill="#94a3b8" font-size="12">Continues Moving</text>
+            </g>
+            
+            <defs>
+              <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                <polygon points="0 0, 10 3, 0 6" fill="#60a5fa" />
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <h3>Key Points</h3>
+        <div class="key-points">
+          <ul>
+            <li>Inertia depends on <strong>mass</strong> - more massive objects have greater inertia</li>
+            <li>An object in motion will never stop by itself without a force</li>
+            <li>This explains why we need seatbelts - our bodies want to keep moving when a car stops</li>
+            <li>In space, objects continue moving indefinitely without forces</li>
+          </ul>
+        </div>
+
+        <h3>Real-World Examples</h3>
+        <div class="example-box">
+          <strong>🚗 Car Stopping:</strong> When you suddenly brake, your body continues moving forward due to inertia (hence the seatbelt!).<br><br>
+          <strong>📖 Book on Table:</strong> A book resting on a table stays there until you push it. The table exerts an upward force (normal force) that balances gravity.<br><br>
+          <strong>🌍 Planets:</strong> Planets orbit the sun because gravity provides the force. Without it, they'd travel in straight lines.
+        </div>
+
+        <div class="learning-indicator">
+          <div class="status" id="status-0">✓</div>
+          <div>
+            <strong>Section 1 Completed!</strong>
+            <p style="margin: 0; color: var(--muted); font-size: 0.9rem;">You've learned about Newton's First Law</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECOND LAW -->
+    <div id="tab-1" class="tab-content">
+      <div class="law-section">
+        <h2>2nd Law of Motion: F = ma</h2>
+        
+        <p><strong>Statement:</strong> The acceleration of an object is directly proportional to the net force applied and inversely proportional to its mass.</p>
+        
+        <div class="formula-box">
+          <strong>F = ma</strong><br>
+          Where:<br>
+          F = Net Force (Newtons, N)<br>
+          m = Mass (kilograms, kg)<br>
+          a = Acceleration (m/s²)
+        </div>
+
+        <h3>Understanding the Concept</h3>
+        <p>The Second Law quantifies the relationship between force, mass, and acceleration. It shows that:</p>
+        <ul style="margin-left: 20px; color: #cbd5e1;">
+          <li>Larger forces produce larger accelerations</li>
+          <li>More mass requires more force for the same acceleration</li>
+          <li>This is the most practical law for solving physics problems</li>
+        </ul>
+
+        <div class="diagram-box">
+          <svg class="svg-diagram" viewBox="0 0 500 250" width="500" height="250">
+            <!-- Different masses with same force -->
+            <g>
+              <text x="80" y="30" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="bold">Same Force, Different Masses</text>
+              
+              <!-- Light object (small mass) -->
+              <circle cx="80" cy="100" r="15" fill="#4ade80" stroke="#38bdf8" stroke-width="2"/>
+              <text x="80" y="105" text-anchor="middle" fill="#000" font-size="12" font-weight="bold">1kg</text>
+              <path d="M 95 100 L 130 100" stroke="#f87171" stroke-width="3" marker-end="url(#arrowhead2)"/>
+              <text x="80" y="140" text-anchor="middle" fill="#cbd5e1" font-size="11">a = 10 m/s²</text>
+              <text x="80" y="155" text-anchor="middle" fill="#cbd5e1" font-size="11">High Acceleration</text>
+              
+              <!-- Heavy object (large mass) -->
+              <circle cx="280" cy="100" r="20" fill="#4ade80" stroke="#38bdf8" stroke-width="2"/>
+              <text x="280" y="105" text-anchor="middle" fill="#000" font-size="12" font-weight="bold">5kg</text>
+              <path d="M 300 100 L 335 100" stroke="#f87171" stroke-width="3" marker-end="url(#arrowhead2)"/>
+              <text x="280" y="140" text-anchor="middle" fill="#cbd5e1" font-size="11">a = 2 m/s²</text>
+              <text x="280" y="155" text-anchor="middle" fill="#cbd5e1" font-size="11">Low Acceleration</text>
+            </g>
+            
+            <text x="250" y="200" text-anchor="middle" fill="var(--muted)" font-size="12">Same Force Applied: F = 10 N</text>
+            
+            <defs>
+              <marker id="arrowhead2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                <polygon points="0 0, 10 3, 0 6" fill="#f87171" />
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <h3>Key Points</h3>
+        <div class="key-points">
+          <ul>
+            <li><strong>Direct Proportionality:</strong> Double the force → double the acceleration</li>
+            <li><strong>Inverse Proportionality:</strong> Double the mass → half the acceleration</li>
+            <li>The net force is what matters, not individual forces</li>
+            <li>Force and acceleration always point in the same direction</li>
+          </ul>
+        </div>
+
+        <h3>Problem Example</h3>
+        <div class="example-box">
+          <strong>Question:</strong> A 2 kg object experiences a net force of 10 N. What is its acceleration?<br><br>
+          <strong>Solution:</strong> F = ma → 10 = 2 × a → a = 5 m/s²<br><br>
+          <strong>Answer:</strong> The object accelerates at 5 meters per second squared.
+        </div>
+
+        <div class="learning-indicator">
+          <div class="status" id="status-1">✓</div>
+          <div>
+            <strong>Section 2 Completed!</strong>
+            <p style="margin: 0; color: var(--muted); font-size: 0.9rem;">You've learned about Newton's Second Law</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THIRD LAW -->
+    <div id="tab-2" class="tab-content">
+      <div class="law-section">
+        <h2>3rd Law of Motion: Action-Reaction</h2>
+        
+        <p><strong>Statement:</strong> For every action, there is an equal and opposite reaction. If object A exerts a force on object B, then object B exerts an equal force in the opposite direction on object A.</p>
+        
+        <div class="formula-box">
+          <strong>F_A on B = -F_B on A</strong><br>
+          (Forces are equal in magnitude, opposite in direction)
+        </div>
+
+        <h3>Understanding the Concept</h3>
+        <p>The Third Law states that forces always come in pairs. This law explains how objects interact with each other through forces. It's crucial to understand that action-reaction forces:</p>
+        <ul style="margin-left: 20px; color: #cbd5e1;">
+          <li>Act on different objects</li>
+          <li>Are equal in magnitude</li>
+          <li>Are opposite in direction</li>
+          <li>Occur simultaneously</li>
+        </ul>
+
+        <div class="diagram-box">
+          <svg class="svg-diagram" viewBox="0 0 500 200" width="500" height="200">
+            <!-- Two objects with forces -->
+            <g>
+              <!-- Object 1 -->
+              <rect x="50" y="70" width="60" height="60" fill="#4ade80" stroke="#38bdf8" stroke-width="2" rx="5"/>
+              <text x="80" y="105" text-anchor="middle" fill="#000" font-size="14" font-weight="bold">A</text>
+              
+              <!-- Force from A on B -->
+              <path d="M 110 100 L 160 100" stroke="#f87171" stroke-width="3" marker-end="url(#arrowhead3)"/>
+              <text x="135" y="90" text-anchor="middle" fill="#f87171" font-size="11" font-weight="bold">F_A→B</text>
+              
+              <!-- Object 2 -->
+              <rect x="190" y="70" width="60" height="60" fill="#60a5fa" stroke="#38bdf8" stroke-width="2" rx="5"/>
+              <text x="220" y="105" text-anchor="middle" fill="#000" font-size="14" font-weight="bold">B</text>
+              
+              <!-- Force from B on A -->
+              <path d="M 190 100 L 140 100" stroke="#fbbf24" stroke-width="3" marker-end="url(#arrowhead4)"/>
+              <text x="155" y="120" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="bold">F_B→A</text>
+            </g>
+            
+            <text x="250" y="180" text-anchor="middle" fill="var(--muted)" font-size="12">Equal Forces, Opposite Directions</text>
+            
+            <defs>
+              <marker id="arrowhead3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                <polygon points="0 0, 10 3, 0 6" fill="#f87171" />
+              </marker>
+              <marker id="arrowhead4" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                <polygon points="0 0, 10 3, 0 6" fill="#fbbf24" />
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <h3>Key Points</h3>
+        <div class="key-points">
+          <ul>
+            <li><strong>Never cancels out:</strong> Action-reaction forces act on different objects</li>
+            <li>You push on a wall, the wall pushes back on you with equal force</li>
+            <li>A rocket pushes gas downward, gas pushes rocket upward</li>
+            <li>Your feet push Earth backward, Earth pushes you forward (you jump)</li>
+          </ul>
+        </div>
+
+        <h3>Real-World Examples</h3>
+        <div class="example-box">
+          <strong>🚀 Rocket Launch:</strong> Rocket expels hot gases downward (action). The gases push the rocket upward (reaction).<br><br>
+          <strong>🏊 Swimming:</strong> You push water backward (action). Water pushes you forward (reaction).<br><br>
+          <strong>🪘 Drumming:</strong> Your hand pushes the drum downward (action). The drum pushes your hand upward (reaction).<br><br>
+          <strong>🌍 Walking:</strong> Your foot pushes Earth backward (action). Earth pushes your foot forward (reaction).
+        </div>
+
+        <h3>Common Misconception</h3>
+        <div style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--red); padding: 15px; margin: 20px 0; border-radius: 6px; color: #fca5a5;">
+          <strong>❌ Wrong:</strong> Action and reaction forces cancel out to produce no net force.<br><br>
+          <strong>✓ Correct:</strong> Action and reaction forces act on different objects, so they don't cancel. Each object experiences a different net force.
+        </div>
+
+        <div class="learning-indicator">
+          <div class="status" id="status-2">✓</div>
+          <div>
+            <strong>Section 3 Completed!</strong>
+            <p style="margin: 0; color: var(--muted); font-size: 0.9rem;">You've learned about Newton's Third Law</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(index) {
+      // Hide all tabs
+      const tabs = document.querySelectorAll('.tab-content');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      
+      // Remove active class from all buttons
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      
+      // Show selected tab
+      document.getElementById(`tab-${index}`).classList.add('active');
+      buttons[index].classList.add('active');
+      
+      // Update progress
+      updateProgress();
+      
+      // Store in localStorage
+      localStorage.setItem('currentTab', index);
+    }
+    
+    function updateProgress() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      
+      document.getElementById('progressFill').style.width = Math.min(scrollPercent, 100) + '%';
+      document.getElementById('progressText').textContent = Math.round(scrollPercent) + '%';
+    }
+    
+    // Track learning progress
+    function trackLearning() {
+      const currentTab = localStorage.getItem('currentTab') || '0';
+      const tabIndex = parseInt(currentTab);
+      switchTab(tabIndex);
+    }
+    
+    // Initialize
+    window.addEventListener('scroll', updateProgress);
+    window.addEventListener('load', trackLearning);
+    
+    // Log learning activity
+    console.log('📚 Learning Notes: Newton\'s Laws of Motion');
+    console.log('Reading Progress Tracking: Enabled');
+  </script>
+</body>
+</html>
