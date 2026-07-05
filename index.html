@@ -107,12 +107,19 @@
     .btn:active {
       transform: scale(0.95);
     }
+    .btn:hover {
+      border-color: var(--accent);
+    }
     .btn.primary {
       background: var(--accent);
       color: #000;
       border: none;
       font-weight: 700;
       box-shadow: 0 0 14px rgba(56,189,248,0.35);
+    }
+    .btn.primary:hover {
+      background: #22b8ff;
+      box-shadow: 0 0 18px rgba(56,189,248,0.5);
     }
     .btn.danger {
       background: var(--red);
@@ -125,6 +132,46 @@
       color: #000;
       border: none;
       font-weight: 700;
+    }
+    /* PARTS NAVIGATION */
+    .parts-nav {
+      background: rgba(17,24,39,0.95);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 0 8px;
+    }
+    .parts-nav label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .parts-nav .part-btn {
+      padding: 6px 10px;
+      border: 1.5px solid var(--border);
+      background: rgba(30,42,58,0.6);
+      color: var(--text);
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.65rem;
+      transition: all 0.15s ease;
+    }
+    .parts-nav .part-btn:hover {
+      border-color: var(--accent);
+      background: rgba(56,189,248,0.1);
+    }
+    .parts-nav .part-btn.active {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(56,189,248,0.3);
     }
     .sound-label {
       display: flex;
@@ -376,6 +423,11 @@
         padding: 5px 8px;
         font-size: 0.6rem;
       }
+      .parts-nav {
+        width: calc(100% - 16px);
+        margin: 6px 8px;
+        padding: 8px;
+      }
     }
     @media (min-width: 1400px) {
       .sidebar {
@@ -405,6 +457,17 @@
       <a class="btn primary" href="quiz.html" target="_blank" rel="noopener">🧩 Quiz</a>
       <button class="btn danger" id="btnReset">↺ Reset</button>
     </div>
+  </div>
+
+  <!-- PARTS NAVIGATION -->
+  <div class="parts-nav">
+    <label>📚 Topics:</label>
+    <a class="part-btn active" href="index.html" title="Newton's First Law">Part 1</a>
+    <a class="part-btn" href="newtons-first-law.html" target="_blank" title="Newton's First Law - Detailed">First Law</a>
+    <a class="part-btn" href="newtons-second-law.html" target="_blank" title="Newton's Second Law">Second Law</a>
+    <a class="part-btn" href="newtons-third-law.html" target="_blank" title="Newton's Third Law">Third Law</a>
+    <a class="part-btn" href="newtons-laws-notes.html" target="_blank" title="Study Notes">📖 Notes</a>
+    <a class="part-btn" href="newtons-laws-video.html" target="_blank" title="Video Resources">🎥 Video</a>
   </div>
 
   <!-- MAIN -->
@@ -873,7 +936,7 @@
         if (log.length > 150) log.shift();
         const row = document.createElement('tr');
         row.innerHTML =
-          `<td>${log[log.length-1].t}</td><td>${log[log.length-1].x}</td><td>${log[log.length-1].v}</td><td>${log[log.length-1].a}</td><td>${log[log.length-1].fn}</td><td>${log[log.length-1].fr}`;
+          `<td>${log[log.length-1].t}</td><td>${log[log.length-1].x}</td><td>${log[log.length-1].v}</td><td>${log[log.length-1].a}</td><td>${log[log.length-1].fn}</td><td>${log[log.length-1].fr}</td>`;
         dataBody.appendChild(row);
         if (dataBody.children.length > 70) dataBody.removeChild(dataBody.firstChild);
         lastRec = time;
