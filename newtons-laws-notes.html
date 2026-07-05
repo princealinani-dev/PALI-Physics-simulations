@@ -36,6 +36,51 @@
       margin: 0 auto;
       padding: 20px;
     }
+    /* NAVIGATION BAR */
+    .nav-bar {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 15px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .nav-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .nav-btn {
+      padding: 8px 14px;
+      border: 1.5px solid var(--border);
+      background: rgba(30,42,58,0.6);
+      color: var(--text);
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.65rem;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .nav-btn:hover {
+      border-color: var(--accent);
+      background: rgba(56,189,248,0.1);
+    }
+    .nav-btn.active {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(56,189,248,0.3);
+    }
     header {
       background: var(--surface);
       border-bottom: 2px solid var(--border);
@@ -233,11 +278,30 @@
       .tab-btn {
         width: 100%;
       }
+      .nav-bar {
+        flex-direction: column;
+      }
+      .nav-btn {
+        width: 100%;
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- NAVIGATION BAR -->
+    <div class="nav-bar">
+      <span class="nav-label">📚 Navigate:</span>
+      <a class="nav-btn" href="index.html">⚛️ Simulation</a>
+      <a class="nav-btn" href="newtons-first-law.html" target="_blank">Part 1</a>
+      <a class="nav-btn" href="newtons-second-law.html" target="_blank">Part 2</a>
+      <a class="nav-btn" href="newtons-third-law.html" target="_blank">Part 3</a>
+      <a class="nav-btn active" href="newtons-laws-notes.html">📖 Notes</a>
+      <a class="nav-btn" href="newtons-laws-video.html">🎥 Videos</a>
+      <a class="nav-btn" href="quiz.html" target="_blank">🧩 Quiz</a>
+    </div>
+
     <a href="index.html" class="back-button">← Back to Simulation</a>
 
     <header>
@@ -267,7 +331,7 @@
         </div>
 
         <h3>Understanding the Concept</h3>
-        <p>Newton's First Law describes the concept of <strong>Inertia</strong>, which is the natural tendency of an object to resist changes in its state of motion. This law forms the foundation of Newton's mechanics and explains why we need forces to change motion.</p>
+        <p>Newton's First Law describes the concept of <strong>Inertia</strong>, which is the natural tendency of an object to resist changes in its state of motion. This law forms the foundation of classical mechanics and explains why objects behave the way they do without external forces.</p>
 
         <div class="diagram-box">
           <svg class="svg-diagram" viewBox="0 0 500 200" width="500" height="200">
